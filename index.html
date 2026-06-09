@@ -1,0 +1,2047 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BARBA NEGRA — Barbearia de Elite</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Bebas+Neue&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:    #080808;
+      --deep:     #111111;
+      --card:     #161616;
+      --gold:     #C4963A;
+      --gold-lt:  #E8C46A;
+      --gold-dk:  #8A6420;
+      --white:    #F5EFE0;
+      --muted:    #888070;
+      --border:   rgba(196,150,58,0.2);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Cormorant Garamond', serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ── Custom Cursor ── */
+    .cursor {
+      position: fixed; top: 0; left: 0; z-index: 9999;
+      pointer-events: none;
+      mix-blend-mode: exclusion;
+    }
+    .cursor-dot {
+      width: 8px; height: 8px;
+      background: var(--gold);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: transform .1s;
+    }
+    .cursor-ring {
+      width: 36px; height: 36px;
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: transform .15s ease, width .3s, height .3s, opacity .3s;
+      opacity: 0.6;
+    }
+    body:has(a:hover) .cursor-ring,
+    body:has(button:hover) .cursor-ring {
+      width: 56px; height: 56px; opacity: 1;
+    }
+
+    /* ── Noise Texture ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 1;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      opacity: .4;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.5rem 5vw;
+      transition: background .4s, padding .4s;
+    }
+    nav.scrolled {
+      background: rgba(8,8,8,.92);
+      backdrop-filter: blur(12px);
+      padding: 1rem 5vw;
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      letter-spacing: .15em;
+      color: var(--gold);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--white); }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: .95rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .3s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-cta {
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: .12em;
+      font-size: 1rem;
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      padding: .55rem 1.6rem;
+      cursor: none;
+      transition: background .3s, color .3s;
+      text-decoration: none;
+    }
+    .nav-cta:hover { background: var(--gold); color: var(--black); }
+
+    /* ── Hero ── */
+    #hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-left {
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 0 5vw 8vh 5vw;
+      position: relative; z-index: 2;
+    }
+    .hero-tag {
+      font-size: .8rem;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      display: flex; align-items: center; gap: 1rem;
+      opacity: 0;
+      animation: fadeUp .8s .3s forwards;
+    }
+    .hero-tag::before {
+      content: ''; display: block;
+      width: 2.5rem; height: 1px;
+      background: var(--gold);
+    }
+    .hero-h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.5rem, 7vw, 7rem);
+      font-weight: 900;
+      line-height: .95;
+      letter-spacing: -.02em;
+      color: var(--white);
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp .9s .5s forwards;
+    }
+    .hero-h1 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+    .hero-desc {
+      font-size: 1.15rem;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 38ch;
+      margin-bottom: 3rem;
+      opacity: 0;
+      animation: fadeUp .9s .7s forwards;
+    }
+    .hero-actions {
+      display: flex; align-items: center; gap: 2rem;
+      opacity: 0;
+      animation: fadeUp .9s .9s forwards;
+    }
+    .btn-primary {
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: .15em;
+      font-size: 1.05rem;
+      background: var(--gold);
+      color: var(--black);
+      border: none;
+      padding: 1rem 2.5rem;
+      cursor: none;
+      transition: background .3s, transform .3s;
+      text-decoration: none;
+    }
+    .btn-primary:hover { background: var(--gold-lt); transform: translateY(-2px); }
+    .btn-ghost {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      letter-spacing: .1em;
+      color: var(--muted);
+      text-decoration: none;
+      display: flex; align-items: center; gap: .6rem;
+      transition: color .3s;
+    }
+    .btn-ghost:hover { color: var(--white); }
+    .btn-ghost::after {
+      content: '→';
+      transition: transform .3s;
+    }
+    .btn-ghost:hover::after { transform: translateX(4px); }
+
+    .hero-right {
+      position: relative; z-index: 2;
+      overflow: hidden;
+    }
+    .hero-img-wrap {
+      position: absolute; inset: 0;
+      clip-path: polygon(8% 0, 100% 0, 100% 100%, 0% 100%);
+      opacity: 0;
+      animation: fadeIn 1.2s .4s forwards;
+    }
+    .hero-img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: grayscale(30%) contrast(1.1);
+    }
+    .hero-img-wrap::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, var(--black) 0%, transparent 30%, transparent 70%, rgba(8,8,8,.5) 100%);
+    }
+    .hero-stats {
+      position: absolute; bottom: 8vh; right: 5vw; z-index: 3;
+      display: flex; gap: 3rem;
+      opacity: 0; animation: fadeUp .9s 1.1s forwards;
+    }
+    .stat { text-align: center; }
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.8rem;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: .75rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* Diagonal line decoration */
+    .hero-line {
+      position: absolute; bottom: 0; left: 50%;
+      width: 1px; height: 80px;
+      background: linear-gradient(to bottom, transparent, var(--gold));
+      opacity: 0; animation: fadeIn 1s 1.3s forwards;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; } to { opacity: 1; }
+    }
+
+    /* ── Section Base ── */
+    section { position: relative; z-index: 2; }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 5rem;
+    }
+    .section-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 8rem;
+      color: rgba(196,150,58,.06);
+      line-height: 1;
+      position: absolute;
+      top: -2rem; left: 50%;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      pointer-events: none;
+    }
+    .section-eyebrow {
+      font-size: .8rem;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+      display: flex; align-items: center; justify-content: center; gap: 1rem;
+    }
+    .section-eyebrow::before,
+    .section-eyebrow::after {
+      content: '◆';
+      font-size: .4rem;
+      opacity: .6;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--white);
+    }
+    .section-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+    .section-sub {
+      font-size: 1.05rem;
+      color: var(--muted);
+      font-weight: 300;
+      margin-top: 1rem;
+      max-width: 48ch;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.7;
+    }
+
+    /* ── Divider ── */
+    .divider {
+      width: 100%; height: 1px;
+      background: linear-gradient(to right, transparent, var(--border), transparent);
+      margin: 0;
+    }
+    .divider-gold {
+      display: flex; align-items: center; justify-content: center;
+      gap: 1.2rem; padding: 2rem 0;
+      color: var(--gold-dk);
+      font-size: .55rem;
+    }
+    .divider-gold::before, .divider-gold::after {
+      content: '';
+      flex: 1;
+      max-width: 120px;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── Services ── */
+    #servicos {
+      padding: 8rem 5vw;
+      position: relative;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin-top: 4rem;
+    }
+    .service-card {
+      background: var(--card);
+      padding: 3rem 2.5rem;
+      border: 1px solid transparent;
+      transition: border-color .3s, transform .3s, background .3s;
+      position: relative;
+      overflow: hidden;
+      cursor: none;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0;
+      width: 0; height: 2px;
+      background: var(--gold);
+      transition: width .4s;
+    }
+    .service-card:hover::before { width: 100%; }
+    .service-card:hover {
+      background: var(--deep);
+      border-color: var(--border);
+      transform: translateY(-4px);
+    }
+    .service-icon {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      display: block;
+    }
+    .service-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: .6rem;
+    }
+    .service-desc {
+      font-size: .95rem;
+      color: var(--muted);
+      line-height: 1.65;
+      font-weight: 300;
+      margin-bottom: 1.5rem;
+    }
+    .service-price {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      letter-spacing: .05em;
+      color: var(--gold);
+    }
+    .service-price span {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: .85rem;
+      letter-spacing: .1em;
+      color: var(--muted);
+      font-weight: 300;
+      text-transform: uppercase;
+    }
+
+    /* ── Gallery ── */
+    #galeria {
+      padding: 8rem 0;
+      background: var(--deep);
+    }
+    .gallery-inner { padding: 0 5vw; }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-rows: auto auto;
+      gap: 6px;
+      margin-top: 4rem;
+    }
+    .gallery-item {
+      overflow: hidden;
+      position: relative;
+      cursor: none;
+    }
+    .gallery-item:first-child {
+      grid-row: span 2;
+    }
+    .gallery-item img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: grayscale(40%) contrast(1.05);
+      transition: filter .5s, transform .6s;
+    }
+    .gallery-item:hover img {
+      filter: grayscale(0%) contrast(1.1);
+      transform: scale(1.04);
+    }
+    .gallery-item::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(8,8,8,.7) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .gallery-overlay {
+      position: absolute; bottom: 1.5rem; left: 1.5rem; z-index: 1;
+      font-size: .75rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity .3s, transform .3s;
+    }
+    .gallery-item:hover .gallery-overlay {
+      opacity: 1; transform: translateY(0);
+    }
+
+    /* ── Testimonials ── */
+    #depoimentos {
+      padding: 8rem 5vw;
+    }
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-top: 4rem;
+    }
+    .testimonial-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 2.5rem;
+      position: relative;
+    }
+    .testimonial-card::before {
+      content: '"';
+      font-family: 'Playfair Display', serif;
+      font-size: 5rem;
+      color: var(--gold);
+      opacity: .15;
+      position: absolute;
+      top: .5rem; left: 1.5rem;
+      line-height: 1;
+    }
+    .stars {
+      display: flex; gap: .2rem;
+      margin-bottom: 1.2rem;
+      color: var(--gold);
+      font-size: .85rem;
+    }
+    .testimonial-text {
+      font-size: 1.05rem;
+      font-style: italic;
+      color: var(--muted);
+      line-height: 1.7;
+      font-weight: 300;
+      margin-bottom: 1.5rem;
+    }
+    .testimonial-author {
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .author-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      object-fit: cover;
+      filter: grayscale(30%);
+      border: 1px solid var(--border);
+    }
+    .author-info strong {
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: var(--white);
+    }
+    .author-info span {
+      font-size: .8rem;
+      letter-spacing: .1em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    /* ── Booking Section ── */
+    #agendamento {
+      padding: 8rem 5vw;
+      background: var(--deep);
+    }
+    .booking-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      gap: 6rem;
+      align-items: start;
+    }
+    .booking-info h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 1.5rem;
+    }
+    .booking-info h2 em { font-style: italic; color: var(--gold); }
+    .booking-info p {
+      font-size: 1.05rem;
+      color: var(--muted);
+      font-weight: 300;
+      line-height: 1.7;
+      margin-bottom: 3rem;
+    }
+    .contact-list { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
+    .contact-list li {
+      display: flex; align-items: center; gap: 1rem;
+      font-size: 1rem; color: var(--muted);
+    }
+    .contact-list li span:first-child {
+      color: var(--gold); font-size: 1.1rem;
+      width: 1.5rem; text-align: center;
+    }
+    .contact-list a { color: inherit; text-decoration: none; }
+    .contact-list a:hover { color: var(--white); }
+
+    /* ── Booking Widget ── */
+    .bk-widget {
+      background: var(--card);
+      border: 1px solid var(--border);
+    }
+
+    /* progress bar */
+    .bk-progress {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+    }
+    .bk-step-tab {
+      flex: 1; padding: .9rem .5rem;
+      text-align: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: .8rem;
+      letter-spacing: .12em;
+      color: var(--muted);
+      border-bottom: 2px solid transparent;
+      transition: color .3s, border-color .3s;
+      position: relative;
+    }
+    .bk-step-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+    .bk-step-tab.done   { color: var(--gold-dk); }
+    .bk-step-tab .tab-num {
+      display: block;
+      font-size: .65rem;
+      opacity: .5;
+      margin-bottom: .15rem;
+    }
+
+    /* panels */
+    .bk-panels { position: relative; overflow: hidden; }
+    .bk-panel {
+      padding: 2rem 2.5rem;
+      display: none;
+      animation: panelIn .3s ease;
+    }
+    .bk-panel.active { display: block; }
+    @keyframes panelIn {
+      from { opacity: 0; transform: translateX(16px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    .bk-panel-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: .4rem;
+    }
+    .bk-panel-sub {
+      font-size: .9rem; color: var(--muted);
+      font-weight: 300; margin-bottom: 1.8rem;
+    }
+
+    /* service cards */
+    .svc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .8rem;
+    }
+    .svc-opt {
+      border: 1px solid var(--border);
+      padding: 1rem 1.2rem;
+      cursor: none;
+      transition: border-color .25s, background .25s;
+      position: relative;
+    }
+    .svc-opt:hover { border-color: var(--gold-dk); background: rgba(196,150,58,.04); }
+    .svc-opt.selected { border-color: var(--gold); background: rgba(196,150,58,.08); }
+    .svc-opt-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem; font-weight: 700;
+      color: var(--white); margin-bottom: .25rem;
+    }
+    .svc-opt-dur {
+      font-size: .75rem; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: .5rem;
+    }
+    .svc-opt-price {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem; color: var(--gold);
+    }
+    .svc-opt .check {
+      position: absolute; top: .7rem; right: .8rem;
+      width: 18px; height: 18px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .65rem;
+      transition: background .25s, border-color .25s;
+    }
+    .svc-opt.selected .check { background: var(--gold); border-color: var(--gold); color: var(--black); }
+
+    /* barber cards */
+    .barber-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: .8rem;
+    }
+    .barber-opt {
+      border: 1px solid var(--border);
+      padding: 1.2rem 1rem;
+      text-align: center;
+      cursor: none;
+      transition: border-color .25s, background .25s;
+    }
+    .barber-opt:hover { border-color: var(--gold-dk); }
+    .barber-opt.selected { border-color: var(--gold); background: rgba(196,150,58,.08); }
+    .barber-avatar {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 0 auto .7rem;
+      display: block;
+      filter: grayscale(20%);
+      border: 2px solid transparent;
+      transition: border-color .25s;
+    }
+    .barber-opt.selected .barber-avatar { border-color: var(--gold); }
+    .barber-name {
+      font-family: 'Playfair Display', serif;
+      font-size: .95rem; font-weight: 700;
+      color: var(--white); margin-bottom: .2rem;
+    }
+    .barber-spec {
+      font-size: .72rem; letter-spacing: .08em;
+      text-transform: uppercase; color: var(--muted);
+    }
+
+    /* calendar */
+    .cal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+    .cal-month {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem; font-weight: 700; color: var(--white);
+    }
+    .cal-nav {
+      background: none; border: 1px solid var(--border);
+      color: var(--muted); width: 32px; height: 32px;
+      cursor: none; font-size: 1rem;
+      transition: border-color .2s, color .2s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .cal-nav:hover { border-color: var(--gold); color: var(--gold); }
+    .cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 3px;
+    }
+    .cal-dow {
+      text-align: center;
+      font-size: .68rem; letter-spacing: .15em;
+      text-transform: uppercase; color: var(--muted);
+      padding-bottom: .5rem;
+    }
+    .cal-day {
+      aspect-ratio: 1;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .9rem; color: var(--muted);
+      cursor: none;
+      transition: background .2s, color .2s;
+      position: relative;
+    }
+    .cal-day.other-month { opacity: .2; pointer-events: none; }
+    .cal-day.past { opacity: .25; pointer-events: none; }
+    .cal-day.closed { opacity: .2; pointer-events: none; }
+    .cal-day.closed::after {
+      content: '✕';
+      position: absolute; font-size: .55rem;
+      bottom: 2px; right: 3px; color: #c44;
+    }
+    .cal-day.available:hover { background: rgba(196,150,58,.15); color: var(--white); }
+    .cal-day.selected { background: var(--gold); color: var(--black); font-weight: 700; }
+    .cal-day.today { outline: 1px solid var(--gold-dk); }
+    .avail-dot {
+      position: absolute; bottom: 3px; left: 50%; transform: translateX(-50%);
+      width: 4px; height: 4px; border-radius: 50%;
+    }
+    .avail-dot.green  { background: #4caf50; }
+    .avail-dot.yellow { background: #ff9800; }
+    .avail-dot.red    { background: #f44336; }
+
+    /* time slots */
+    .slots-legend {
+      display: flex; gap: 1.5rem; margin-bottom: 1.2rem;
+    }
+    .legend-item {
+      display: flex; align-items: center; gap: .4rem;
+      font-size: .75rem; color: var(--muted);
+      letter-spacing: .08em; text-transform: uppercase;
+    }
+    .legend-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+    }
+    .slots-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: .6rem;
+    }
+    .slot-btn {
+      padding: .7rem .5rem;
+      border: 1px solid var(--border);
+      background: none;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1rem; letter-spacing: .1em;
+      color: var(--white);
+      cursor: none;
+      transition: border-color .2s, background .2s, color .2s, opacity .2s;
+      position: relative;
+    }
+    .slot-btn.few   { border-color: rgba(255,152,0,.4); }
+    .slot-btn.few:hover { background: rgba(255,152,0,.12); border-color: #ff9800; }
+    .slot-btn.taken { opacity: .35; pointer-events: none; color: var(--muted); }
+    .slot-btn.taken::after { content: 'Ocupado'; display: block; font-size: .55rem; letter-spacing: .05em; color: #f44336; }
+    .slot-btn.available:hover { border-color: var(--gold); background: rgba(196,150,58,.1); }
+    .slot-btn.selected { background: var(--gold); border-color: var(--gold); color: var(--black); }
+    .slot-status {
+      display: block; font-size: .55rem; letter-spacing: .05em;
+      margin-top: .1rem;
+    }
+    .slot-btn.available .slot-status { color: #4caf50; }
+    .slot-btn.few       .slot-status { color: #ff9800; }
+
+    /* personal info form */
+    .bk-form { display: flex; flex-direction: column; gap: 1rem; }
+    .bk-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .bk-field { display: flex; flex-direction: column; gap: .4rem; }
+    .bk-field label {
+      font-size: .7rem; letter-spacing: .2em;
+      text-transform: uppercase; color: var(--muted);
+    }
+    .bk-field input, .bk-field textarea {
+      background: var(--deep);
+      border: 1px solid var(--border);
+      color: var(--white);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      padding: .8rem 1rem;
+      outline: none;
+      transition: border-color .3s;
+      cursor: none;
+    }
+    .bk-field input:focus, .bk-field textarea:focus { border-color: var(--gold); }
+    .bk-field textarea { resize: vertical; min-height: 80px; }
+
+    /* summary */
+    .bk-summary {
+      background: var(--deep);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      margin-bottom: 1.2rem;
+      display: flex; flex-direction: column; gap: .7rem;
+    }
+    .bk-summary-row {
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .bk-summary-row span:first-child {
+      font-size: .75rem; letter-spacing: .15em;
+      text-transform: uppercase; color: var(--muted);
+    }
+    .bk-summary-row span:last-child {
+      font-family: 'Playfair Display', serif;
+      font-size: .95rem; color: var(--white);
+    }
+    .bk-summary-divider { height: 1px; background: var(--border); }
+    .bk-summary-total span:last-child {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem; color: var(--gold);
+    }
+
+    /* footer buttons */
+    .bk-footer {
+      padding: 1.2rem 2.5rem;
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 1rem;
+    }
+    .bk-btn-back {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: .15em;
+      font-size: .95rem;
+      padding: .8rem 1.6rem;
+      cursor: none;
+      transition: border-color .2s, color .2s;
+    }
+    .bk-btn-back:hover { border-color: var(--muted); color: var(--white); }
+    .bk-btn-next {
+      background: var(--gold);
+      border: none;
+      color: var(--black);
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: .15em;
+      font-size: .95rem;
+      padding: .8rem 2rem;
+      cursor: none;
+      transition: background .2s, transform .2s;
+      flex: 1;
+      max-width: 220px;
+    }
+    .bk-btn-next:hover { background: var(--gold-lt); transform: translateY(-1px); }
+    .bk-btn-next:disabled { opacity: .35; transform: none; pointer-events: none; }
+
+    /* success */
+    .bk-success {
+      text-align: center;
+      padding: 3rem 2.5rem;
+    }
+    .bk-success-icon {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: rgba(76,175,80,.12);
+      border: 1px solid rgba(76,175,80,.4);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.5rem;
+      font-size: 1.8rem;
+    }
+    .bk-success h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem; font-weight: 700;
+      color: var(--white); margin-bottom: .6rem;
+    }
+    .bk-success p {
+      font-size: 1rem; color: var(--muted);
+      font-weight: 300; line-height: 1.7;
+      max-width: 38ch; margin: 0 auto 2rem;
+    }
+    .bk-booking-code {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem; letter-spacing: .3em;
+      color: var(--gold);
+      background: var(--deep);
+      border: 1px solid var(--border);
+      padding: .8rem 2rem;
+      display: inline-block;
+      margin-bottom: 1.5rem;
+    }
+    .bk-new-btn {
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: .15em; font-size: .95rem;
+      background: none; border: 1px solid var(--border);
+      color: var(--muted); padding: .7rem 1.8rem;
+      cursor: none; transition: border-color .2s, color .2s;
+    }
+    .bk-new-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* legend tooltip */
+    .slots-date-label {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem; color: var(--white);
+      margin-bottom: 1rem;
+    }
+    .slots-date-label em { color: var(--gold); font-style: italic; }
+
+    @media (max-width: 1024px) {
+      .booking-layout { grid-template-columns: 1fr; gap: 3rem; }
+    }
+    @media (max-width: 640px) {
+      .svc-grid    { grid-template-columns: 1fr; }
+      .barber-grid { grid-template-columns: 1fr 1fr; }
+      .slots-grid  { grid-template-columns: repeat(3, 1fr); }
+      .bk-form-row { grid-template-columns: 1fr; }
+      .bk-panel    { padding: 1.5rem; }
+      .bk-footer   { padding: 1rem 1.5rem; }
+    }
+
+    /* ── Hours Banner ── */
+    .hours-banner {
+      background: var(--gold);
+      color: var(--black);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4rem;
+      padding: 2rem 5vw;
+      flex-wrap: wrap;
+    }
+    .hour-item { text-align: center; }
+    .hour-day {
+      font-size: .7rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      font-weight: 600;
+      opacity: .7;
+    }
+    .hour-time {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: .08em;
+    }
+    .hour-sep {
+      font-size: 1.5rem;
+      opacity: .3;
+      font-family: 'Playfair Display', serif;
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: #030303;
+      padding: 5rem 5vw 2.5rem;
+      position: relative; z-index: 2;
+      border-top: 1px solid var(--border);
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 4rem;
+      margin-bottom: 4rem;
+    }
+    .footer-brand {}
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: .15em;
+      color: var(--gold);
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .footer-logo span { color: var(--white); }
+    .footer-tagline {
+      font-size: .95rem;
+      color: var(--muted);
+      font-style: italic;
+      line-height: 1.6;
+      max-width: 28ch;
+      margin-bottom: 2rem;
+    }
+    .social-links {
+      display: flex; gap: .8rem;
+    }
+    .social-link {
+      width: 38px; height: 38px;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: .9rem;
+      transition: border-color .3s, color .3s, background .3s;
+    }
+    .social-link:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(196,150,58,.07);
+    }
+    .footer-col h4 {
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: .15em;
+      font-size: 1rem;
+      color: var(--white);
+      margin-bottom: 1.5rem;
+    }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: .7rem; }
+    .footer-links a {
+      font-size: .95rem;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .3s;
+    }
+    .footer-links a:hover { color: var(--gold); }
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding-top: 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: .8rem;
+      color: var(--muted);
+      letter-spacing: .05em;
+    }
+    .footer-bottom a { color: var(--gold-dk); text-decoration: none; }
+
+    /* ── Reveal on Scroll ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: .1s; }
+    .reveal-delay-2 { transition-delay: .2s; }
+    .reveal-delay-3 { transition-delay: .3s; }
+    .reveal-delay-4 { transition-delay: .4s; }
+    .reveal-delay-5 { transition-delay: .5s; }
+
+    /* ── Mobile Nav Drawer ── */
+    .hamburger {
+      display: none;
+      flex-direction: column; gap: 6px;
+      background: none; border: none; padding: .5rem;
+      cursor: pointer; z-index: 200;
+    }
+    .hamburger span {
+      display: block; width: 26px; height: 1.5px;
+      background: var(--white);
+      transition: transform .35s, opacity .35s, background .3s;
+      transform-origin: center;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+
+    .mobile-drawer {
+      position: fixed; inset: 0; z-index: 150;
+      pointer-events: none;
+    }
+    .mobile-drawer-backdrop {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,.7);
+      opacity: 0; transition: opacity .35s;
+    }
+    .mobile-drawer-panel {
+      position: absolute; top: 0; right: 0; bottom: 0;
+      width: min(80vw, 320px);
+      background: var(--deep);
+      border-left: 1px solid var(--border);
+      transform: translateX(100%);
+      transition: transform .35s cubic-bezier(.4,0,.2,1);
+      display: flex; flex-direction: column;
+      padding: 5rem 2rem 3rem;
+      gap: 0;
+    }
+    .mobile-drawer.open { pointer-events: all; }
+    .mobile-drawer.open .mobile-drawer-backdrop { opacity: 1; }
+    .mobile-drawer.open .mobile-drawer-panel { transform: translateX(0); }
+    .mobile-drawer-links {
+      list-style: none; display: flex; flex-direction: column; gap: 0;
+      border-top: 1px solid var(--border);
+    }
+    .mobile-drawer-links li a {
+      display: block;
+      padding: 1.1rem 0;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem; font-weight: 700;
+      color: var(--white);
+      text-decoration: none;
+      border-bottom: 1px solid var(--border);
+      transition: color .2s, padding-left .2s;
+    }
+    .mobile-drawer-links li a:hover { color: var(--gold); padding-left: .5rem; }
+    .mobile-drawer-cta {
+      display: block; margin-top: 2rem;
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: .15em; font-size: 1.1rem;
+      background: var(--gold); color: var(--black);
+      text-decoration: none; text-align: center;
+      padding: 1rem; transition: background .3s;
+    }
+    .mobile-drawer-cta:hover { background: var(--gold-lt); }
+    .mobile-drawer-contact {
+      margin-top: auto;
+      font-size: .85rem; color: var(--muted);
+      line-height: 1.8;
+    }
+    .mobile-drawer-contact a { color: var(--gold-dk); text-decoration: none; }
+
+    /* ── Responsive ── */
+
+    /* Tablet */
+    @media (max-width: 1024px) {
+      #hero { grid-template-columns: 1fr; min-height: 100svh; }
+      .hero-right {
+        position: absolute; inset: 0; z-index: 0;
+      }
+      .hero-img-wrap {
+        clip-path: none; opacity: 1; animation: none;
+      }
+      .hero-img-wrap::after {
+        background: linear-gradient(to bottom, rgba(8,8,8,.55) 0%, rgba(8,8,8,.8) 60%, var(--black) 100%);
+      }
+      .hero-left {
+        position: relative; z-index: 2;
+        padding: 10rem 6vw 6rem;
+        justify-content: flex-end; min-height: 100svh;
+      }
+      .hero-stats {
+        position: static; margin-top: 2.5rem;
+        justify-content: flex-start;
+      }
+      .services-grid    { grid-template-columns: 1fr 1fr; }
+      .gallery-grid     { grid-template-columns: 1fr 1fr; }
+      .gallery-item:first-child { grid-row: span 1; }
+      .booking-layout   { grid-template-columns: 1fr; gap: 3rem; }
+      .footer-grid      { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+    }
+
+    /* Mobile */
+    @media (max-width: 640px) {
+      /* global */
+      body { cursor: auto; }
+      .cursor { display: none; }
+      button, a, [onclick] { cursor: pointer; }
+      input, select, textarea { cursor: text; font-size: 16px !important; } /* prevent iOS zoom */
+
+      /* nav */
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+      nav { padding: 1.1rem 5vw; }
+      nav.scrolled { padding: .9rem 5vw; }
+
+      /* hero */
+      .hero-left { padding: 7rem 5vw 4rem; }
+      .hero-h1 { font-size: clamp(2.8rem, 12vw, 4.5rem); margin-bottom: 1.2rem; }
+      .hero-desc { font-size: 1rem; margin-bottom: 2rem; }
+      .hero-actions { flex-direction: column; align-items: flex-start; gap: 1rem; }
+      .btn-primary { width: 100%; text-align: center; padding: 1rem; }
+      .hero-stats { gap: 2rem; }
+      .stat-num { font-size: 2.2rem; }
+
+      /* sections */
+      #servicos, #depoimentos, #agendamento { padding: 5rem 5vw; }
+      #galeria { padding: 5rem 0; }
+      .gallery-inner { padding: 0 5vw; }
+      .section-num { font-size: 5rem; }
+      .section-header { margin-bottom: 3rem; }
+
+      .services-grid { grid-template-columns: 1fr; gap: 1px; }
+      .service-card  { padding: 2rem 1.5rem; }
+
+      .gallery-grid  { grid-template-columns: 1fr 1fr; gap: 4px; }
+      .gallery-item  { min-height: 42vw; }
+
+      .testimonials-grid { grid-template-columns: 1fr; gap: 1.2rem; }
+      .testimonial-card  { padding: 1.8rem 1.5rem; }
+
+      /* hours banner */
+      .hours-banner { gap: 1rem; padding: 1.5rem 5vw; flex-direction: column; }
+      .hour-sep { display: none; }
+
+      /* booking widget */
+      .bk-step-tab { font-size: .65rem; padding: .7rem .2rem; }
+      .tab-num { display: none; }
+      .bk-panel { padding: 1.2rem; }
+      .bk-panel-title { font-size: 1.1rem; }
+      .svc-grid { grid-template-columns: 1fr 1fr; gap: .6rem; }
+      .svc-opt  { padding: .9rem .8rem; }
+      .svc-opt-name { font-size: .9rem; }
+      .svc-opt-price { font-size: 1.1rem; }
+      .barber-grid  { grid-template-columns: repeat(3, 1fr); gap: .6rem; }
+      .barber-avatar { width: 42px; height: 42px; }
+      .barber-name { font-size: .85rem; }
+      .barber-spec { font-size: .65rem; }
+      .cal-day { font-size: .82rem; min-height: 36px; }
+      .slots-grid { grid-template-columns: repeat(3, 1fr); gap: .5rem; }
+      .slot-btn { padding: .8rem .4rem; font-size: .9rem; }
+      .bk-form-row { grid-template-columns: 1fr; }
+      .bk-footer { padding: 1rem 1.2rem; flex-wrap: wrap; }
+      .bk-btn-next { max-width: none; flex: 1; }
+      .bk-summary { padding: 1rem; }
+      .bk-success { padding: 2rem 1.2rem; }
+
+      /* footer */
+      footer { padding: 3.5rem 5vw 2rem; }
+      .footer-grid { grid-template-columns: 1fr; gap: 2rem; margin-bottom: 2.5rem; }
+      .footer-bottom { flex-direction: column; gap: .8rem; text-align: center; }
+    }
+
+    /* Very small screens */
+    @media (max-width: 380px) {
+      .svc-grid    { grid-template-columns: 1fr; }
+      .barber-grid { grid-template-columns: 1fr 1fr; }
+      .bk-step-tab { padding: .6rem .1rem; letter-spacing: 0; font-size: .6rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div class="cursor" id="cursorDot"><div class="cursor-dot"></div></div>
+<div class="cursor" id="cursorRing"><div class="cursor-ring"></div></div>
+
+<!-- Mobile Drawer -->
+<div class="mobile-drawer" id="mobileDrawer">
+  <div class="mobile-drawer-backdrop" id="drawerBackdrop"></div>
+  <div class="mobile-drawer-panel">
+    <ul class="mobile-drawer-links">
+      <li><a href="#servicos"    onclick="closeDrawer()">Serviços</a></li>
+      <li><a href="#galeria"     onclick="closeDrawer()">Galeria</a></li>
+      <li><a href="#depoimentos" onclick="closeDrawer()">Clientes</a></li>
+      <li><a href="#agendamento" onclick="closeDrawer()">Contato</a></li>
+    </ul>
+    <a href="#agendamento" class="mobile-drawer-cta" onclick="closeDrawer()">Agendar Horário →</a>
+    <div class="mobile-drawer-contact">
+      <div>(81) 9 9999-9999</div>
+      <div>Boa Viagem, Recife – PE</div>
+      <div>Seg–Sex 09–20h · Sáb 08–18h</div>
+    </div>
+  </div>
+</div>
+
+<!-- Nav -->
+<nav id="navbar">
+  <a class="nav-logo" href="#"><span>BARBA</span> NEGRA</a>
+  <ul class="nav-links">
+    <li><a href="#servicos">Serviços</a></li>
+    <li><a href="#galeria">Galeria</a></li>
+    <li><a href="#depoimentos">Clientes</a></li>
+    <li><a href="#agendamento">Contato</a></li>
+  </ul>
+  <a href="#agendamento" class="nav-cta">Agendar</a>
+  <button class="hamburger" id="hamburger" aria-label="Menu" onclick="toggleDrawer()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="hero-left">
+    <p class="hero-tag">Desde 2008 · Recife, PE</p>
+    <h1 class="hero-h1">
+      A Arte<br>
+      do Corte<br>
+      <em>Perfeito.</em>
+    </h1>
+    <p class="hero-desc">
+      Onde tradição e precisão se encontram. Cada corte é uma obra — executada por mãos que entendem que estilo é identidade.
+    </p>
+    <div class="hero-actions">
+      <a href="#agendamento" class="btn-primary">Agendar Horário</a>
+      <a href="#galeria" class="btn-ghost">Ver Trabalhos</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">12K+</div>
+        <div class="stat-label">Clientes</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">16</div>
+        <div class="stat-label">Anos</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">4.9★</div>
+        <div class="stat-label">Avaliação</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-img-wrap">
+      <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=900&q=80" alt="Barbearia" />
+    </div>
+  </div>
+  <div class="hero-line"></div>
+</section>
+
+<div class="divider"></div>
+<div class="divider-gold">◆ ◆ ◆</div>
+<div class="divider"></div>
+
+<!-- ── SERVIÇOS ── -->
+<section id="servicos">
+  <div class="section-num">SERVIÇOS</div>
+  <div class="section-header reveal">
+    <div class="section-eyebrow">O que fazemos</div>
+    <h2 class="section-title">Cada Detalhe,<br><em>Impecável</em></h2>
+    <p class="section-sub">Do corte clássico à barba desenhada. Técnicas apuradas, produtos premium, resultado que fala por si.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card reveal reveal-delay-1">
+      <span class="service-icon">✂</span>
+      <div class="service-name">Corte Clássico</div>
+      <p class="service-desc">Tesoura, máquina e acabamento perfeito. Atendimento exclusivo para o homem que valoriza precisão.</p>
+      <div class="service-price">R$ 65 <span>/ sessão</span></div>
+    </div>
+    <div class="service-card reveal reveal-delay-2">
+      <span class="service-icon">🪒</span>
+      <div class="service-name">Barba Completa</div>
+      <p class="service-desc">Modelagem, toalha quente, navalha e finalização com produtos selecionados. Ritual completo.</p>
+      <div class="service-price">R$ 55 <span>/ sessão</span></div>
+    </div>
+    <div class="service-card reveal reveal-delay-3">
+      <span class="service-icon">👑</span>
+      <div class="service-name">Combo Premium</div>
+      <p class="service-desc">Corte + barba + hidratação capilar. A experiência completa Barba Negra para quem não aceita menos.</p>
+      <div class="service-price">R$ 110 <span>/ sessão</span></div>
+    </div>
+    <div class="service-card reveal reveal-delay-2">
+      <span class="service-icon">💆</span>
+      <div class="service-name">Relaxamento</div>
+      <p class="service-desc">Massagem capilar e tratamento capilar com produtos restauradores para couro cabeludo e fios.</p>
+      <div class="service-price">R$ 80 <span>/ sessão</span></div>
+    </div>
+    <div class="service-card reveal reveal-delay-3">
+      <span class="service-icon">⚡</span>
+      <div class="service-name">Pigmentação</div>
+      <p class="service-desc">Cobertura de falhas na barba e cabelo. Resultado natural, duradouro. Discrição total.</p>
+      <div class="service-price">R$ 90 <span>/ sessão</span></div>
+    </div>
+    <div class="service-card reveal reveal-delay-4">
+      <span class="service-icon">🌿</span>
+      <div class="service-name">Tratamento Capilar</div>
+      <p class="service-desc">Hidratação profunda, reconstrução e cronograma capilar personalizado. Ciência e cuidado.</p>
+      <div class="service-price">R$ 120 <span>/ sessão</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── GALERIA ── -->
+<section id="galeria">
+  <div class="gallery-inner">
+    <div class="section-num">GALERIA</div>
+    <div class="section-header reveal">
+      <div class="section-eyebrow">Nossos Trabalhos</div>
+      <h2 class="section-title">Estilo que<br><em>Define</em></h2>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item reveal">
+        <img src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=700&q=80" alt="Corte degradê" />
+        <div class="gallery-overlay">Degradê Clássico</div>
+      </div>
+      <div class="gallery-item reveal reveal-delay-1">
+        <img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=500&q=80" alt="Barba modelada" />
+        <div class="gallery-overlay">Barba Full</div>
+      </div>
+      <div class="gallery-item reveal reveal-delay-2">
+        <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=500&q=80" alt="Corte social" />
+        <div class="gallery-overlay">Social Premium</div>
+      </div>
+      <div class="gallery-item reveal reveal-delay-1">
+        <img src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=500&q=80" alt="Navalha" />
+        <div class="gallery-overlay">Navalha Tradicional</div>
+      </div>
+      <div class="gallery-item reveal reveal-delay-3">
+        <img src="https://images.unsplash.com/photo-1560472355-536de3962603?w=500&q=80" alt="Corte moderno" />
+        <div class="gallery-overlay">Skin Fade</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+<div class="divider-gold">◆ ◆ ◆</div>
+<div class="divider"></div>
+
+<!-- ── DEPOIMENTOS ── -->
+<section id="depoimentos">
+  <div class="section-num">CLIENTES</div>
+  <div class="section-header reveal">
+    <div class="section-eyebrow">Quem nos conhece, volta</div>
+    <h2 class="section-title">Palavra de<br><em>Quem Sabe</em></h2>
+  </div>
+  <div class="testimonials-grid">
+    <div class="testimonial-card reveal reveal-delay-1">
+      <div class="stars">★★★★★</div>
+      <p class="testimonial-text">"Há 7 anos venho aqui e nunca me decepcionei. O Lucas entende exatamente o que quero antes mesmo de eu terminar de falar. Resultado impecável toda vez."</p>
+      <div class="testimonial-author">
+        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80" alt="Rafael M." class="author-avatar" />
+        <div class="author-info">
+          <strong>Rafael Mendes</strong>
+          <span>Cliente desde 2017</span>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card reveal reveal-delay-2">
+      <div class="stars">★★★★★</div>
+      <p class="testimonial-text">"Melhor barbearia do Recife, sem discussão. Fui em vários lugares, mas aqui o nível é outro. Ambiente incrível, atendimento top, saio sempre com a autoestima lá em cima."</p>
+      <div class="testimonial-author">
+        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80" alt="Carlos V." class="author-avatar" />
+        <div class="author-info">
+          <strong>Carlos Vieira</strong>
+          <span>Cliente desde 2020</span>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card reveal reveal-delay-3">
+      <div class="stars">★★★★★</div>
+      <p class="testimonial-text">"O combo premium mudou minha relação com a barbearia. Saio diferente, mais confiante. Os produtos que usam são de outro nível. Vale cada centavo."</p>
+      <div class="testimonial-author">
+        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80" alt="Diego A." class="author-avatar" />
+        <div class="author-info">
+          <strong>Diego Alves</strong>
+          <span>Cliente desde 2022</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── HORÁRIOS ── -->
+<div class="hours-banner">
+  <div class="hour-item">
+    <div class="hour-day">Segunda — Sexta</div>
+    <div class="hour-time">09:00 — 20:00</div>
+  </div>
+  <div class="hour-sep">|</div>
+  <div class="hour-item">
+    <div class="hour-day">Sábado</div>
+    <div class="hour-time">08:00 — 18:00</div>
+  </div>
+  <div class="hour-sep">|</div>
+  <div class="hour-item">
+    <div class="hour-day">Domingo</div>
+    <div class="hour-time">Fechado</div>
+  </div>
+</div>
+
+<!-- ── AGENDAMENTO ── -->
+<section id="agendamento">
+  <div class="booking-layout">
+    <div class="booking-info reveal">
+      <div class="section-eyebrow" style="justify-content:flex-start">Agende sua visita</div>
+      <h2>Marque seu<br>horário <em>agora</em></h2>
+      <p>Veja os horários disponíveis em tempo real e garanta sua vaga em menos de 2 minutos.</p>
+      <ul class="contact-list">
+        <li><span>📍</span><span>Rua da Gávea, 340 — Boa Viagem, Recife – PE</span></li>
+        <li><span>📞</span><span><a href="tel:+558199999999">(81) 9 9999-9999</a></span></li>
+        <li><span>✉</span><span><a href="mailto:contato@barbanegra.com.br">contato@barbanegra.com.br</a></span></li>
+        <li><span>💬</span><span><a href="#">WhatsApp para agendamento rápido</a></span></li>
+      </ul>
+    </div>
+
+    <!-- Booking Widget -->
+    <div class="bk-widget reveal reveal-delay-2" id="bookingWidget">
+      <!-- Progress tabs -->
+      <div class="bk-progress">
+        <div class="bk-step-tab active" id="tab-1"><span class="tab-num">01</span>Serviço</div>
+        <div class="bk-step-tab" id="tab-2"><span class="tab-num">02</span>Barbeiro</div>
+        <div class="bk-step-tab" id="tab-3"><span class="tab-num">03</span>Data</div>
+        <div class="bk-step-tab" id="tab-4"><span class="tab-num">04</span>Horário</div>
+        <div class="bk-step-tab" id="tab-5"><span class="tab-num">05</span>Dados</div>
+      </div>
+
+      <!-- Step 1: Service -->
+      <div class="bk-panel active" id="panel-1">
+        <div class="bk-panel-title">Escolha o serviço</div>
+        <div class="bk-panel-sub">Selecione o que você precisa hoje</div>
+        <div class="svc-grid">
+          <div class="svc-opt" data-svc="Corte Clássico" data-price="65" data-dur="45 min" onclick="selectService(this)">
+            <div class="check">✓</div>
+            <div class="svc-opt-name">Corte Clássico</div>
+            <div class="svc-opt-dur">✂ 45 min</div>
+            <div class="svc-opt-price">R$ 65</div>
+          </div>
+          <div class="svc-opt" data-svc="Barba Completa" data-price="55" data-dur="40 min" onclick="selectService(this)">
+            <div class="check">✓</div>
+            <div class="svc-opt-name">Barba Completa</div>
+            <div class="svc-opt-dur">🪒 40 min</div>
+            <div class="svc-opt-price">R$ 55</div>
+          </div>
+          <div class="svc-opt" data-svc="Combo Premium" data-price="110" data-dur="80 min" onclick="selectService(this)">
+            <div class="check">✓</div>
+            <div class="svc-opt-name">Combo Premium</div>
+            <div class="svc-opt-dur">👑 80 min</div>
+            <div class="svc-opt-price">R$ 110</div>
+          </div>
+          <div class="svc-opt" data-svc="Relaxamento" data-price="80" data-dur="50 min" onclick="selectService(this)">
+            <div class="check">✓</div>
+            <div class="svc-opt-name">Relaxamento</div>
+            <div class="svc-opt-dur">💆 50 min</div>
+            <div class="svc-opt-price">R$ 80</div>
+          </div>
+          <div class="svc-opt" data-svc="Pigmentação" data-price="90" data-dur="60 min" onclick="selectService(this)">
+            <div class="check">✓</div>
+            <div class="svc-opt-name">Pigmentação</div>
+            <div class="svc-opt-dur">⚡ 60 min</div>
+            <div class="svc-opt-price">R$ 90</div>
+          </div>
+          <div class="svc-opt" data-svc="Tratamento Capilar" data-price="120" data-dur="70 min" onclick="selectService(this)">
+            <div class="check">✓</div>
+            <div class="svc-opt-name">Tratamento Capilar</div>
+            <div class="svc-opt-dur">🌿 70 min</div>
+            <div class="svc-opt-price">R$ 120</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Barber -->
+      <div class="bk-panel" id="panel-2">
+        <div class="bk-panel-title">Escolha o barbeiro</div>
+        <div class="bk-panel-sub">Cada profissional com sua especialidade</div>
+        <div class="barber-grid">
+          <div class="barber-opt" data-barber="Lucas Mendes" onclick="selectBarber(this)">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&q=80" alt="Lucas" class="barber-avatar" />
+            <div class="barber-name">Lucas</div>
+            <div class="barber-spec">Degradê · Navalhado</div>
+          </div>
+          <div class="barber-opt" data-barber="Rafael Costa" onclick="selectBarber(this)">
+            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&q=80" alt="Rafael" class="barber-avatar" />
+            <div class="barber-name">Rafael</div>
+            <div class="barber-spec">Barba · Tesoura</div>
+          </div>
+          <div class="barber-opt" data-barber="Diego Alves" onclick="selectBarber(this)">
+            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=120&q=80" alt="Diego" class="barber-avatar" />
+            <div class="barber-name">Diego</div>
+            <div class="barber-spec">Tratamentos · Skin Fade</div>
+          </div>
+        </div>
+        <div style="margin-top:1rem;padding:.8rem 1rem;border:1px solid var(--border);cursor:none;font-size:.9rem;color:var(--muted);text-align:center;" id="anyBarberOpt" onclick="selectAnyBarber()">
+          Sem preferência — qualquer disponível
+        </div>
+      </div>
+
+      <!-- Step 3: Calendar -->
+      <div class="bk-panel" id="panel-3">
+        <div class="bk-panel-title">Escolha a data</div>
+        <div class="bk-panel-sub">Pontos coloridos indicam disponibilidade</div>
+        <div class="cal-header">
+          <button class="cal-nav" onclick="calPrev()">‹</button>
+          <div class="cal-month" id="calMonth"></div>
+          <button class="cal-nav" onclick="calNext()">›</button>
+        </div>
+        <div class="cal-grid" id="calGrid"></div>
+        <div style="display:flex;gap:1.2rem;margin-top:1rem;flex-wrap:wrap;">
+          <div class="legend-item"><div class="legend-dot" style="background:#4caf50"></div>Disponível</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#ff9800"></div>Poucos horários</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#f44336"></div>Lotado</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--muted)"></div>Fechado</div>
+        </div>
+      </div>
+
+      <!-- Step 4: Time slots -->
+      <div class="bk-panel" id="panel-4">
+        <div class="bk-panel-title">Escolha o horário</div>
+        <div class="slots-date-label" id="slotsDateLabel">Horários para <em>—</em></div>
+        <div class="slots-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#4caf50"></div>Livre</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#ff9800"></div>Último</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#f44336"></div>Ocupado</div>
+        </div>
+        <div class="slots-grid" id="slotsGrid"></div>
+      </div>
+
+      <!-- Step 5: Personal info -->
+      <div class="bk-panel" id="panel-5">
+        <div class="bk-panel-title">Seus dados</div>
+        <div class="bk-panel-sub">Para confirmar sua reserva</div>
+        <div class="bk-summary" id="bookingSummary"></div>
+        <div class="bk-form">
+          <div class="bk-form-row">
+            <div class="bk-field">
+              <label>Nome completo</label>
+              <input type="text" id="bkName" placeholder="Seu nome" />
+            </div>
+            <div class="bk-field">
+              <label>Telefone / WhatsApp</label>
+              <input type="tel" id="bkPhone" placeholder="(81) 9 xxxx-xxxx" />
+            </div>
+          </div>
+          <div class="bk-field">
+            <label>Observações (opcional)</label>
+            <textarea id="bkNotes" placeholder="Alguma preferência ou detalhe..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer buttons -->
+      <div class="bk-footer" id="bkFooter">
+        <button class="bk-btn-back" id="bkBack" onclick="bkGoBack()" style="display:none">← Voltar</button>
+        <button class="bk-btn-next" id="bkNext" onclick="bkGoNext()" disabled>Continuar →</button>
+      </div>
+    </div>
+    <!-- /booking widget -->
+
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <span class="footer-logo"><span>BARBA</span> NEGRA</span>
+      <p class="footer-tagline">"Estilo não é o que você veste. É o que você carrega."</p>
+      <div class="social-links">
+        <a href="#" class="social-link" aria-label="Instagram">IG</a>
+        <a href="#" class="social-link" aria-label="Facebook">FB</a>
+        <a href="#" class="social-link" aria-label="WhatsApp">WA</a>
+        <a href="#" class="social-link" aria-label="TikTok">TK</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Serviços</h4>
+      <ul class="footer-links">
+        <li><a href="#servicos">Corte Clássico</a></li>
+        <li><a href="#servicos">Barba Completa</a></li>
+        <li><a href="#servicos">Combo Premium</a></li>
+        <li><a href="#servicos">Tratamentos</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Empresa</h4>
+      <ul class="footer-links">
+        <li><a href="#">Nossa História</a></li>
+        <li><a href="#">Nossa Equipe</a></li>
+        <li><a href="#galeria">Galeria</a></li>
+        <li><a href="#depoimentos">Depoimentos</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contato</h4>
+      <ul class="footer-links">
+        <li><a href="#">Boa Viagem, Recife</a></li>
+        <li><a href="tel:+558199999999">(81) 9 9999-9999</a></li>
+        <li><a href="mailto:contato@barbanegra.com.br">E-mail</a></li>
+        <li><a href="#agendamento">Agendar Online</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2024 Barba Negra. Todos os direitos reservados.</span>
+    <span>Feito com precisão · <a href="#">Política de Privacidade</a></span>
+  </div>
+</footer>
+
+<script>
+  /* ── Cursor (desktop only) ── */
+  const isTouchDevice = () => window.matchMedia('(hover: none)').matches;
+  const dot  = document.getElementById('cursorDot');
+  const ring = document.getElementById('cursorRing');
+  if (!isTouchDevice()) {
+    document.addEventListener('mousemove', e => {
+      dot.style.transform  = `translate(${e.clientX}px, ${e.clientY}px)`;
+      ring.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+    });
+  }
+
+  /* ── Mobile Drawer ── */
+  function toggleDrawer() {
+    const drawer = document.getElementById('mobileDrawer');
+    const burger = document.getElementById('hamburger');
+    const open   = drawer.classList.toggle('open');
+    burger.classList.toggle('open', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  }
+  function closeDrawer() {
+    document.getElementById('mobileDrawer').classList.remove('open');
+    document.getElementById('hamburger').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('drawerBackdrop').addEventListener('click', closeDrawer);
+
+  /* ── Sticky nav ── */
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  /* ── Scroll reveal ── */
+  const revealObs = new IntersectionObserver(entries => {
+    entries.forEach(el => { if (el.isIntersecting) el.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+  /* ════════════════════════════════════════
+     BOOKING ENGINE
+  ════════════════════════════════════════ */
+  const TIMES_WEEKDAY = ['09:00','10:00','11:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00'];
+  const TIMES_SATURDAY = ['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00'];
+  const STORAGE_KEY = 'bn_bookings_v1';
+
+  // booking state
+  let bk = { step: 1, service: null, price: null, dur: null, barber: null, date: null, time: null };
+
+  // calendar state
+  let calDate = new Date();
+  calDate.setDate(1);
+
+  /* ── localStorage helpers ── */
+  function getBookings() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { return {}; }
+  }
+  function saveBooking(dateStr, time, barber) {
+    const db = getBookings();
+    const key = `${dateStr}|${time}|${barber}`;
+    db[key] = true;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+  }
+  function isSlotTaken(dateStr, time, barber) {
+    const db = getBookings();
+    if (barber && barber !== 'Qualquer disponível') {
+      return !!db[`${dateStr}|${time}|${barber}`];
+    }
+    // if no barber pref, check if ALL barbers taken
+    const barbers = ['Lucas Mendes','Rafael Costa','Diego Alves'];
+    return barbers.every(b => !!db[`${dateStr}|${time}|${b}`]);
+  }
+
+  /* Seed realistic fake bookings so the calendar feels alive */
+  function seedFakeBookings() {
+    const db = getBookings();
+    if (db.__seeded) return;
+    const barbers = ['Lucas Mendes','Rafael Costa','Diego Alves'];
+    const today = new Date();
+    // seed next 14 days
+    for (let d = 0; d < 14; d++) {
+      const day = new Date(today);
+      day.setDate(today.getDate() + d);
+      if (day.getDay() === 0) continue; // closed sundays
+      const dateStr = fmtDate(day);
+      const times = day.getDay() === 6 ? TIMES_SATURDAY : TIMES_WEEKDAY;
+      // random 30–70% fill
+      times.forEach(t => {
+        barbers.forEach(b => {
+          if (Math.random() < 0.38) db[`${dateStr}|${t}|${b}`] = true;
+        });
+      });
+    }
+    db.__seeded = true;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+  }
+
+  function fmtDate(d) {
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  }
+  function fmtDateBR(str) {
+    const [y,m,d] = str.split('-');
+    const days = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
+    const months = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+    const dt = new Date(+y, +m-1, +d);
+    return `${days[dt.getDay()]}, ${d} de ${months[+m-1]}`;
+  }
+
+  /* availability for a date: returns 'green'|'yellow'|'red'|'closed' */
+  function dayAvailability(dateStr) {
+    const dt = new Date(dateStr + 'T12:00:00');
+    if (dt.getDay() === 0) return 'closed';
+    const times = dt.getDay() === 6 ? TIMES_SATURDAY : TIMES_WEEKDAY;
+    const barbers = ['Lucas Mendes','Rafael Costa','Diego Alves'];
+    const db = getBookings();
+    let freeSlots = 0;
+    times.forEach(t => {
+      const free = barbers.filter(b => !db[`${dateStr}|${t}|${b}`]).length;
+      if (free > 0) freeSlots++;
+    });
+    const total = times.length;
+    if (freeSlots === 0) return 'red';
+    if (freeSlots <= Math.ceil(total * 0.3)) return 'yellow';
+    return 'green';
+  }
+
+  /* ── CALENDAR ── */
+  function renderCalendar() {
+    const monthNames = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
+                        'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+    document.getElementById('calMonth').textContent =
+      `${monthNames[calDate.getMonth()]} ${calDate.getFullYear()}`;
+
+    const grid = document.getElementById('calGrid');
+    grid.innerHTML = '';
+
+    // day-of-week headers
+    ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'].forEach(d => {
+      const el = document.createElement('div');
+      el.className = 'cal-dow'; el.textContent = d;
+      grid.appendChild(el);
+    });
+
+    const firstDay = new Date(calDate.getFullYear(), calDate.getMonth(), 1).getDay();
+    const daysInMonth = new Date(calDate.getFullYear(), calDate.getMonth()+1, 0).getDate();
+    const prevDays = new Date(calDate.getFullYear(), calDate.getMonth(), 0).getDate();
+    const today = new Date(); today.setHours(0,0,0,0);
+
+    // prev month filler
+    for (let i = firstDay - 1; i >= 0; i--) {
+      const el = document.createElement('div');
+      el.className = 'cal-day other-month';
+      el.textContent = prevDays - i;
+      grid.appendChild(el);
+    }
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const dt = new Date(calDate.getFullYear(), calDate.getMonth(), d);
+      dt.setHours(0,0,0,0);
+      const dateStr = fmtDate(dt);
+      const el = document.createElement('div');
+      el.textContent = d;
+
+      const avail = dayAvailability(dateStr);
+      const isPast = dt < today;
+      const isToday = dt.getTime() === today.getTime();
+      const isSelected = bk.date === dateStr;
+
+      if (isPast) { el.className = 'cal-day past'; }
+      else if (avail === 'closed') { el.className = 'cal-day closed'; el.title = 'Fechado'; }
+      else if (avail === 'red') { el.className = 'cal-day'; }
+      else { el.className = 'cal-day available'; }
+
+      if (isToday) el.classList.add('today');
+      if (isSelected) { el.classList.remove('available'); el.classList.add('selected'); }
+
+      if (!isPast && avail !== 'closed') {
+        const dot = document.createElement('div');
+        dot.className = `avail-dot ${avail}`;
+        el.appendChild(dot);
+        if (avail !== 'red') {
+          el.addEventListener('click', () => pickDate(dateStr, el));
+        }
+      }
+      grid.appendChild(el);
+    }
+  }
+
+  function calPrev() {
+    calDate.setMonth(calDate.getMonth() - 1);
+    renderCalendar();
+  }
+  function calNext() {
+    calDate.setMonth(calDate.getMonth() + 1);
+    renderCalendar();
+  }
+  function pickDate(dateStr, el) {
+    bk.date = dateStr; bk.time = null;
+    document.querySelectorAll('.cal-day').forEach(d => {
+      d.classList.remove('selected');
+      if (!d.classList.contains('past') && !d.classList.contains('closed') && !d.classList.contains('other-month')) {
+        d.classList.add('available');
+      }
+    });
+    el.classList.remove('available'); el.classList.add('selected');
+    updateNextBtn();
+  }
+
+  /* ── TIME SLOTS ── */
+  function renderSlots() {
+    if (!bk.date) return;
+    const dt = new Date(bk.date + 'T12:00:00');
+    const times = dt.getDay() === 6 ? TIMES_SATURDAY : TIMES_WEEKDAY;
+    const barbers = ['Lucas Mendes','Rafael Costa','Diego Alves'];
+    const db = getBookings();
+
+    document.getElementById('slotsDateLabel').innerHTML =
+      `Horários para <em>${fmtDateBR(bk.date)}</em>`;
+
+    const grid = document.getElementById('slotsGrid');
+    grid.innerHTML = '';
+
+    times.forEach(t => {
+      const takenBarbers = barbers.filter(b => db[`${bk.date}|${t}|${b}`]).length;
+      const freeCount = barbers.length - takenBarbers;
+      let status = 'available';
+      if (freeCount === 0) status = 'taken';
+      else if (freeCount === 1) status = 'few';
+
+      // if user picked a specific barber, check only that barber
+      if (bk.barber && bk.barber !== 'Qualquer disponível') {
+        status = db[`${bk.date}|${t}|${bk.barber}`] ? 'taken' : 'available';
+      }
+
+      const btn = document.createElement('button');
+      btn.className = `slot-btn ${status}${bk.time === t ? ' selected' : ''}`;
+      btn.innerHTML = `${t}<span class="slot-status">${
+        status === 'taken' ? '' : status === 'few' ? 'Último' : 'Livre'
+      }</span>`;
+      if (status !== 'taken') {
+        btn.addEventListener('click', () => pickSlot(t, btn));
+      }
+      grid.appendChild(btn);
+    });
+  }
+
+  function pickSlot(time, el) {
+    bk.time = time;
+    document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('selected'));
+    el.classList.add('selected');
+    updateNextBtn();
+  }
+
+  /* ── STEP NAVIGATION ── */
+  function goToStep(n) {
+    document.querySelectorAll('.bk-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.bk-step-tab').forEach((t, i) => {
+      t.classList.remove('active', 'done');
+      if (i + 1 < n) t.classList.add('done');
+      if (i + 1 === n) t.classList.add('active');
+    });
+    document.getElementById(`panel-${n}`).classList.add('active');
+    bk.step = n;
+    document.getElementById('bkBack').style.display = n > 1 ? 'block' : 'none';
+    document.getElementById('bkNext').textContent = n === 5 ? 'Confirmar Agendamento ✓' : 'Continuar →';
+    updateNextBtn();
+    if (n === 3) renderCalendar();
+    if (n === 4) renderSlots();
+    if (n === 5) renderSummary();
+  }
+
+  function bkGoNext() {
+    if (bk.step === 5) { confirmBooking(); return; }
+    goToStep(bk.step + 1);
+  }
+  function bkGoBack() { goToStep(bk.step - 1); }
+
+  function updateNextBtn() {
+    const btn = document.getElementById('bkNext');
+    const ok = {
+      1: () => !!bk.service,
+      2: () => !!bk.barber,
+      3: () => !!bk.date,
+      4: () => !!bk.time,
+      5: () => !!document.getElementById('bkName')?.value.trim()
+    };
+    btn.disabled = !(ok[bk.step] && ok[bk.step]());
+  }
+
+  /* ── SERVICE / BARBER SELECTORS ── */
+  function selectService(el) {
+    document.querySelectorAll('.svc-opt').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    bk.service = el.dataset.svc;
+    bk.price   = el.dataset.price;
+    bk.dur     = el.dataset.dur;
+    updateNextBtn();
+  }
+
+  function selectBarber(el) {
+    document.querySelectorAll('.barber-opt').forEach(o => o.classList.remove('selected'));
+    document.getElementById('anyBarberOpt').style.borderColor = '';
+    document.getElementById('anyBarberOpt').style.color = '';
+    el.classList.add('selected');
+    bk.barber = el.dataset.barber;
+    updateNextBtn();
+  }
+
+  function selectAnyBarber() {
+    document.querySelectorAll('.barber-opt').forEach(o => o.classList.remove('selected'));
+    const el = document.getElementById('anyBarberOpt');
+    el.style.borderColor = 'var(--gold)';
+    el.style.color = 'var(--white)';
+    bk.barber = 'Qualquer disponível';
+    updateNextBtn();
+  }
+
+  /* ── SUMMARY ── */
+  function renderSummary() {
+    document.getElementById('bookingSummary').innerHTML = `
+      <div class="bk-summary-row"><span>Serviço</span><span>${bk.service}</span></div>
+      <div class="bk-summary-divider"></div>
+      <div class="bk-summary-row"><span>Barbeiro</span><span>${bk.barber}</span></div>
+      <div class="bk-summary-row"><span>Data</span><span>${fmtDateBR(bk.date)}</span></div>
+      <div class="bk-summary-row"><span>Horário</span><span>${bk.time}</span></div>
+      <div class="bk-summary-row"><span>Duração</span><span>${bk.dur}</span></div>
+      <div class="bk-summary-divider"></div>
+      <div class="bk-summary-row bk-summary-total"><span>Total</span><span>R$ ${bk.price}</span></div>
+    `;
+    // live validate name input
+    document.getElementById('bkName').addEventListener('input', updateNextBtn);
+  }
+
+  /* ── CONFIRM ── */
+  function confirmBooking() {
+    const name  = document.getElementById('bkName').value.trim();
+    const phone = document.getElementById('bkPhone').value.trim();
+    if (!name) { document.getElementById('bkName').focus(); return; }
+
+    const barber = bk.barber === 'Qualquer disponível'
+      ? ['Lucas Mendes','Rafael Costa','Diego Alves'].find(b => {
+          const db = getBookings();
+          return !db[`${bk.date}|${bk.time}|${b}`];
+        }) || 'Lucas Mendes'
+      : bk.barber;
+
+    saveBooking(bk.date, bk.time, barber);
+
+    const code = 'BN' + Math.random().toString(36).substring(2,7).toUpperCase();
+
+    // replace widget content with success screen
+    const widget = document.getElementById('bookingWidget');
+    widget.innerHTML = `
+      <div class="bk-success">
+        <div class="bk-success-icon">✓</div>
+        <h3>Agendado com sucesso!</h3>
+        <p>Seu horário está reservado. Confirmaremos por WhatsApp em breve.</p>
+        <div class="bk-booking-code">${code}</div>
+        <div style="font-size:.8rem;color:var(--muted);margin-bottom:1.5rem;letter-spacing:.05em">
+          Guarde este código de confirmação
+        </div>
+        <div style="background:var(--deep);border:1px solid var(--border);padding:1.2rem;margin-bottom:1.5rem;text-align:left;">
+          <div class="bk-summary-row" style="display:flex;justify-content:space-between;margin-bottom:.5rem;">
+            <span style="font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)">Serviço</span>
+            <span style="font-family:'Playfair Display',serif;color:var(--white)">${bk.service}</span>
+          </div>
+          <div class="bk-summary-row" style="display:flex;justify-content:space-between;margin-bottom:.5rem;">
+            <span style="font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)">Barbeiro</span>
+            <span style="font-family:'Playfair Display',serif;color:var(--white)">${barber}</span>
+          </div>
+          <div class="bk-summary-row" style="display:flex;justify-content:space-between;">
+            <span style="font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)">Data & Hora</span>
+            <span style="font-family:'Playfair Display',serif;color:var(--gold)">${fmtDateBR(bk.date)} às ${bk.time}</span>
+          </div>
+        </div>
+        <button class="bk-new-btn" onclick="location.reload()">Fazer novo agendamento</button>
+      </div>
+    `;
+  }
+
+  /* ── INIT ── */
+  seedFakeBookings();
+  goToStep(1);
+</script>
+</body>
+</html>

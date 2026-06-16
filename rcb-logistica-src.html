@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>RCB Logística e Transportes — Tradição em movimento</title>
+<meta name="description" content="RCB Logística e Transportes: duas gerações movendo cargas a granel pelo Brasil com segurança, pontualidade e o compromisso de uma empresa familiar." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --vinho:#722F37;--vinho-dark:#4A1D23;--vinho-darker:#2E1216;--vinho-light:#9C4A53;
+    --cinza:#f5f2f0;--texto:#2b2426;--muted:#7a6e6e;--branco:#ffffff;--wa:#25D366;
+  }
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter',sans-serif;color:var(--texto);background:var(--branco);line-height:1.65;overflow-x:hidden}
+  h1,h2,h3,h4{font-family:'Oswald',sans-serif;letter-spacing:.5px}
+  img{max-width:100%;display:block}
+  a{text-decoration:none;color:inherit}
+  .container{max-width:1180px;margin:0 auto;padding:0 24px}
+
+  /* NAV */
+  header{position:fixed;top:0;left:0;right:0;z-index:1000;transition:background .35s,box-shadow .35s,padding .35s;padding:16px 0}
+  header.scrolled{background:rgba(46,18,22,0.95);backdrop-filter:blur(10px);box-shadow:0 4px 24px rgba(0,0,0,.18);padding:8px 0}
+  nav{display:flex;align-items:center;justify-content:space-between}
+  .logo-box img{height:76px;filter:drop-shadow(0 3px 10px rgba(0,0,0,.45))}
+  .nav-links{display:flex;gap:30px;align-items:center}
+  .nav-links a{color:#fff;font-size:13.5px;font-weight:500;letter-spacing:.5px;text-transform:uppercase;position:relative;padding-bottom:4px;transition:color .25s;text-shadow:0 1px 6px rgba(0,0,0,.4)}
+  .nav-links a::after{content:"";position:absolute;left:0;bottom:0;width:0;height:2px;background:#F0C8CB;transition:width .25s}
+  .nav-links a:hover::after{width:100%}
+  .nav-cta{background:var(--wa);color:#fff!important;padding:10px 22px;border-radius:30px;font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:1px;display:flex;align-items:center;gap:8px;transition:transform .2s,box-shadow .2s;text-shadow:none!important}
+  .nav-cta::after{display:none}
+  .nav-cta:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(37,211,102,.4)}
+  .burger{display:none;color:#fff;font-size:26px;cursor:pointer;background:none;border:none}
+
+  /* HERO */
+  .hero{position:relative;height:100vh;min-height:640px;display:flex;align-items:center;overflow:hidden}
+  .hero-bg{position:absolute;inset:0;z-index:0;overflow:hidden}
+  .hero-bg .slide{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;animation:heroFade 16s infinite}
+  .hero-bg .slide:nth-child(1){animation-delay:0s}
+  .hero-bg .slide:nth-child(2){animation-delay:8s}
+  @keyframes heroFade{0%{opacity:0;transform:scale(1.04)}6%{opacity:1}44%{opacity:1}50%{opacity:0}100%{opacity:0;transform:scale(1.16)}}
+  .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,rgba(46,18,22,.94) 8%,rgba(74,29,35,.80) 42%,rgba(46,18,22,.30) 100%);z-index:1}
+  .hero-content{position:relative;z-index:2;color:#fff;max-width:700px}
+  .hero-tag{display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.28);padding:8px 18px;border-radius:30px;font-size:11.5px;letter-spacing:3px;text-transform:uppercase;margin-bottom:24px;backdrop-filter:blur(4px)}
+  .hero h1{font-size:clamp(38px,6vw,70px);font-weight:700;line-height:1.06;margin-bottom:22px;text-shadow:0 4px 30px rgba(0,0,0,.45)}
+  .hero h1 em{font-style:normal;color:#F0C8CB}
+  .hero p{font-size:clamp(16px,2vw,19px);color:#ece0e2;max-width:540px;margin-bottom:36px;font-weight:300}
+  .hero-btns{display:flex;gap:16px;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:10px;padding:16px 32px;border-radius:6px;font-weight:600;font-size:13.5px;letter-spacing:1.5px;text-transform:uppercase;transition:transform .25s,box-shadow .25s,background .25s;border:2px solid transparent;cursor:pointer}
+  .btn-primary{background:var(--wa);color:#fff}
+  .btn-primary:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(37,211,102,.45)}
+  .btn-outline{border-color:rgba(255,255,255,.55);color:#fff}
+  .btn-outline:hover{background:rgba(255,255,255,.12);transform:translateY(-3px)}
+  .scroll-cue{position:absolute;bottom:34px;left:50%;transform:translateX(-50%);z-index:2;color:#fff;opacity:.7;font-size:11px;letter-spacing:2px;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:10px}
+  .scroll-cue .line{width:1px;height:40px;background:linear-gradient(#fff,transparent);animation:scrollDown 1.8s infinite}
+  @keyframes scrollDown{0%{transform:scaleY(0);opacity:0}40%{transform:scaleY(1);opacity:1}100%{transform:scaleY(0) translateY(40px);opacity:0}}
+
+  /* STATS */
+  .stats{background:var(--vinho);color:#fff;display:grid;grid-template-columns:repeat(4,1fr);padding:50px 0;text-align:center}
+  .stats>div{padding:0 16px}
+  .stats .num{font-family:'Oswald',sans-serif;font-size:clamp(30px,4vw,48px);font-weight:700;color:#F0C8CB;line-height:1}
+  .stats .lbl{font-size:11.5px;letter-spacing:2px;text-transform:uppercase;margin-top:10px;color:#ecdcde}
+
+  section{padding:100px 0}
+  .section-head{text-align:center;max-width:700px;margin:0 auto 60px}
+  .eyebrow{display:inline-block;color:var(--vinho);font-weight:700;letter-spacing:3px;text-transform:uppercase;font-size:12px;margin-bottom:14px}
+  .eyebrow::before{content:"— "}.eyebrow::after{content:" —"}
+  .section-head h2{font-size:clamp(28px,4vw,42px);color:var(--vinho-darker);font-weight:700;line-height:1.2}
+  .section-head p{color:var(--muted);margin-top:18px;font-size:16px}
+
+  /* HISTÓRIA */
+  .historia{background:var(--cinza)}
+  .historia-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:60px;align-items:center}
+  .historia-img{position:relative;border-radius:10px;overflow:hidden;box-shadow:0 30px 60px -20px rgba(46,18,22,.4);aspect-ratio:4/3}
+  .historia-img .hist-road{width:100%;height:100%;object-fit:cover}
+  .historia-img::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(46,18,22,.15),rgba(46,18,22,.55))}
+  .historia-img .hist-logo{position:absolute;inset:0;margin:auto;width:74%;height:auto;z-index:2;filter:drop-shadow(0 4px 10px rgba(255,255,255,.6)) drop-shadow(0 8px 22px rgba(0,0,0,.5))}
+  .historia-text .eyebrow{margin-bottom:10px}
+  .historia-text h2{font-size:clamp(26px,3.6vw,38px);color:var(--vinho-darker);font-weight:700;margin-bottom:22px;line-height:1.25}
+  .historia-text p{color:#544949;margin-bottom:18px;font-size:15.5px}
+  .historia-text strong{color:var(--vinho);font-weight:600}
+  .timeline{display:flex;gap:26px;margin-top:32px;flex-wrap:wrap}
+  .tl-item{flex:1;min-width:190px;border-top:3px solid var(--vinho);padding-top:14px}
+  .tl-item h4{font-size:15px;color:var(--vinho-darker);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+  .tl-item p{font-size:13.5px;color:var(--muted);margin:0}
+  .signoff{margin-top:30px;font-family:'Oswald',sans-serif;font-size:17px;color:var(--vinho-darker);font-style:italic;border-left:3px solid var(--vinho);padding-left:18px;line-height:1.5}
+
+  /* SERVIÇOS */
+  .servicos{background:#fff}
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .card{background:var(--cinza);border-radius:12px;padding:34px 28px;text-align:left;transition:transform .3s,box-shadow .3s,background .3s;border:1px solid transparent}
+  .card:hover{transform:translateY(-8px);box-shadow:0 20px 40px -15px rgba(46,18,22,.28);background:#fff;border-color:#f0e3e5}
+  .card .ico{width:54px;height:54px;border-radius:50%;background:var(--vinho);color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:18px}
+  .card h3{font-size:18px;color:var(--vinho-darker);margin-bottom:10px;font-weight:600}
+  .card p{font-size:14px;color:var(--muted)}
+
+  /* FROTA */
+  .frota{position:relative;color:#fff;overflow:hidden}
+  .frota-bg{position:absolute;inset:0;z-index:0}
+  .frota-bg img{width:100%;height:100%;object-fit:cover}
+  .frota::after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,rgba(46,18,22,.96),rgba(74,29,35,.80));z-index:1}
+  .frota .container{position:relative;z-index:2}
+  .frota-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:60px;align-items:center}
+  .frota-text .eyebrow{color:#F0C8CB}
+  .frota-text h2{font-size:clamp(26px,3.6vw,40px);font-weight:700;margin-bottom:22px}
+  .frota-text p{color:#ece0e2;margin-bottom:16px;font-size:16px;font-weight:300}
+  .frota-list{display:flex;flex-direction:column;gap:14px;margin-top:24px;list-style:none}
+  .frota-list li{display:flex;align-items:flex-start;gap:14px;font-size:15px;color:#f3e6e8}
+  .frota-list li::before{content:"✓";flex:0 0 28px;height:28px;border-radius:50%;background:var(--wa);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+  .frota-img{border-radius:10px;overflow:hidden;box-shadow:0 30px 70px -20px rgba(0,0,0,.55)}
+  .frota-img img{aspect-ratio:4/3;object-fit:cover;width:100%}
+
+  /* CTA */
+  .cta-band{background:linear-gradient(120deg,var(--vinho),var(--vinho-dark));color:#fff;text-align:center;padding:78px 0}
+  .cta-band h2{font-size:clamp(26px,4vw,38px);margin-bottom:14px;font-weight:700}
+  .cta-band p{color:#f3e6e8;margin-bottom:32px;font-weight:300}
+
+  /* CONTATO */
+  .contato{background:var(--cinza)}
+  .contato-grid{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:stretch}
+  .contato-info{display:flex;flex-direction:column;justify-content:center}
+  .contato-info .eyebrow{margin-bottom:10px}
+  .contato-info h2{font-size:clamp(26px,3.6vw,38px);color:var(--vinho-darker);font-weight:700;margin-bottom:22px}
+  .contato-info>p{color:var(--muted);margin-bottom:28px}
+  .info-item{display:flex;gap:16px;align-items:flex-start;margin-bottom:22px}
+  .info-item .ico{width:46px;height:46px;border-radius:50%;background:var(--vinho);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+  .info-item h4{font-size:14px;color:var(--vinho-darker);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+  .info-item p{margin:0;color:var(--muted);font-size:15px}
+  .map-wrap{border-radius:12px;overflow:hidden;box-shadow:0 20px 50px -20px rgba(46,18,22,.35);min-height:400px}
+  .map-wrap iframe{width:100%;height:100%;min-height:400px;border:0;filter:saturate(.9)}
+
+  /* FOOTER */
+  footer{background:var(--vinho-darker);color:#cbb7ba;padding:48px 0 24px}
+  .foot-grid{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:30px;padding-bottom:28px;border-bottom:1px solid rgba(255,255,255,.08)}
+  .foot-logo img{height:88px}
+  .foot-links{display:flex;gap:32px;flex-wrap:wrap}
+  .foot-links a{font-size:13px;text-transform:uppercase;letter-spacing:1px;color:#cbb7ba;transition:color .2s}
+  .foot-links a:hover{color:#fff}
+  .foot-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:22px;font-size:12.5px;flex-wrap:wrap;gap:10px}
+
+  /* WHATSAPP */
+  .wa-float{position:fixed;bottom:26px;right:26px;z-index:999;background:var(--wa);color:#fff;width:62px;height:62px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(37,211,102,.5);animation:pulse 2.4s infinite}
+  .wa-float svg{width:32px;height:32px;fill:#fff}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(37,211,102,.55)}70%{box-shadow:0 0 0 16px rgba(37,211,102,0)}100%{box-shadow:0 0 0 0 rgba(37,211,102,0)}}
+
+  .reveal{opacity:0;transform:translateY(40px);transition:opacity .8s ease,transform .8s ease}
+  .reveal.show{opacity:1;transform:translateY(0)}
+
+  @media(max-width:980px){
+    .cards{grid-template-columns:repeat(2,1fr)}
+    .historia-grid,.frota-grid,.contato-grid{grid-template-columns:1fr;gap:40px}
+    .historia-img,.frota-img{order:-1}
+    .stats{grid-template-columns:repeat(2,1fr);row-gap:34px}
+  }
+  @media(max-width:760px){
+    .nav-links{position:fixed;top:0;right:0;height:100vh;width:80%;max-width:320px;background:var(--vinho-darker);flex-direction:column;justify-content:center;align-items:flex-start;padding:0 40px;gap:26px;transform:translateX(100%);transition:transform .35s}
+    .nav-links.open{transform:translateX(0)}
+    .nav-links a{text-shadow:none}
+    .nav-cta{order:99;margin-top:10px}
+    .burger{display:block}
+    .cards{grid-template-columns:1fr}
+    section{padding:70px 0}
+  }
+</style>
+</head>
+<body>
+
+<header id="topo">
+  <div class="container">
+    <nav>
+      <div class="logo-box"><img src="assets/logo-rcb-branco.png" alt="RCB Logística e Transportes"></div>
+      <div class="nav-links" id="navLinks">
+        <a href="#topo">Início</a>
+        <a href="#historia">História</a>
+        <a href="#servicos">Serviços</a>
+        <a href="#frota">Frota</a>
+        <a href="#contato">Contato</a>
+        <a class="nav-cta" href="https://wa.me/5541998322530" target="_blank" rel="noopener">WhatsApp</a>
+      </div>
+      <button class="burger" id="burger">☰</button>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg">
+    <img class="slide" src="assets/caminhao-rcb.jpeg" alt="Caminhão tanque RCB Logística">
+    <img class="slide" src="assets/caminhao-scania.jpeg" alt="Scania RCB carregando">
+  </div>
+  <div class="container hero-content">
+    <span class="hero-tag">Tradição familiar movida pela estrada</span>
+    <h1>Transportamos <em>confiança</em> em cada estrada do Brasil</h1>
+    <p>Duas gerações movendo cargas a granel com segurança, pontualidade e o compromisso de uma empresa que nasceu da paixão pelos caminhões.</p>
+    <div class="hero-btns">
+      <a class="btn btn-primary" href="https://wa.me/5541998322530" target="_blank" rel="noopener">Falar no WhatsApp</a>
+      <a class="btn btn-outline" href="#frota">Conheça nossa frota</a>
+    </div>
+  </div>
+  <div class="scroll-cue"><span>Role para conhecer</span><div class="line"></div></div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="reveal"><div class="num">+30</div><div class="lbl">Caminhões na frota</div></div>
+  <div class="reveal"><div class="num">2</div><div class="lbl">Gerações na estrada</div></div>
+  <div class="reveal"><div class="num">5</div><div class="lbl">Estados atendidos</div></div>
+  <div class="reveal"><div class="num">24h</div><div class="lbl">Operação programada</div></div>
+</div>
+
+<!-- HISTÓRIA -->
+<section class="historia" id="historia">
+  <div class="container historia-grid">
+    <div class="historia-img reveal">
+      <img class="hist-road" src="assets/estrada-c.jpg" alt="Estrada aberta — a paixão que move a RCB">
+      <img class="hist-logo" src="assets/logo-rcb.png" alt="RCB Logística e Transportes">
+    </div>
+    <div class="historia-text reveal">
+      <span class="eyebrow">Nossa história</span>
+      <h2>Uma história movida por paixão e confiança</h2>
+      <p>Toda grande jornada começa com um sonho. A nossa começou com a paixão de <strong>Carlos Braghini</strong> pelos caminhões e pelo transporte de cargas.</p>
+      <p>Movido pelo desejo de construir algo sólido e duradouro, Carlos transformou seu amor pela estrada em uma empresa baseada em trabalho, honestidade e comprometimento. Cada viagem realizada, cada cliente atendido e cada motorista valorizado ajudaram a construir uma história marcada pela dedicação e pelo respeito.</p>
+      <p>Com o passar dos anos, a empresa deixou de ser apenas um negócio. Tornou-se um <strong>legado familiar</strong>.</p>
+      <p>Hoje, esse legado segue firme pelas mãos de <strong>Rodrigo Braghini</strong>, que mantém vivos os valores ensinados por seu pai — respeito a cada motorista, atenção a cada cliente e o mesmo compromisso com a excelência — conduzindo a empresa rumo ao futuro sem esquecer as raízes que construíram essa trajetória.</p>
+      <div class="timeline">
+        <div class="tl-item"><h4>Carlos Braghini</h4><p>Fundador — transformou a paixão pela estrada em empresa.</p></div>
+        <div class="tl-item"><h4>Rodrigo Braghini</h4><p>Atual gestão — mantém os valores e moderniza a operação.</p></div>
+      </div>
+      <p class="signoff">"Mais do que transportar cargas, transportamos confiança, responsabilidade e a tradição de uma família que acredita que o sucesso é construído por pessoas."</p>
+    </div>
+  </div>
+</section>
+
+<!-- SERVIÇOS -->
+<section class="servicos" id="servicos">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">O que fazemos</span>
+      <h2>Soluções completas em transporte de cargas a granel</h2>
+      <p>Atuamos com frota própria, agregada e de terceiros, levando cargas com segurança e pontualidade até o destino final.</p>
+    </div>
+    <div class="cards">
+      <div class="card reveal"><div class="ico">🚛</div><h3>Transporte a granel</h3><p>Cargas a granel em bitrens e rodotrens, com tanques preparados para grandes volumes e máxima segurança no trajeto.</p></div>
+      <div class="card reveal"><div class="ico">📍</div><h3>Rastreamento em tempo real</h3><p>Frota monitorada do início ao fim da viagem, garantindo visibilidade total da operação para o cliente.</p></div>
+      <div class="card reveal"><div class="ico">🤝</div><h3>Frota própria e agregada</h3><p>Equipe própria, agregados e parceiros terceirizados, todos seguindo o mesmo padrão de qualidade e segurança RCB.</p></div>
+      <div class="card reveal"><div class="ico">⏱</div><h3>Pontualidade garantida</h3><p>Programação de cargas planejada para cumprir prazos e manter a operação do cliente sempre em movimento.</p></div>
+      <div class="card reveal"><div class="ico">🛡️</div><h3>Segurança e conformidade</h3><p>Manutenção preventiva, motoristas experientes e documentação sempre em dia em toda a frota.</p></div>
+      <div class="card reveal"><div class="ico">💬</div><h3>Atendimento direto</h3><p>Comunicação ágil pelo WhatsApp, do orçamento à entrega, com respostas rápidas e acompanhamento próximo.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FROTA -->
+<section class="frota" id="frota">
+  <div class="frota-bg"><img src="assets/caminhao-rcb.jpeg" alt=""></div>
+  <div class="container frota-grid">
+    <div class="frota-text reveal">
+      <span class="eyebrow">Nossa frota</span>
+      <h2>Equipamentos preparados para grandes operações</h2>
+      <p>Trabalhamos com bitrens e rodotrens equipados para o transporte de cargas a granel, atendendo com agilidade e segurança às demandas das principais indústrias do setor.</p>
+      <ul class="frota-list">
+        <li>Veículos próprios, agregados e terceiros padronizados</li>
+        <li>Rastreamento, tag de pedágio e manutenção preventiva em dia</li>
+        <li>Motoristas experientes e valorizados pela empresa</li>
+        <li>Operação programada com WhatsApp como canal direto com o motorista</li>
+      </ul>
+    </div>
+    <div class="frota-img reveal">
+      <img src="assets/caminhao-scania.jpeg" alt="Caminhão Scania da frota RCB">
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-band">
+  <div class="container reveal">
+    <h2>Vamos colocar sua carga em movimento</h2>
+    <p>Fale agora com nossa equipe e solicite um orçamento sem compromisso.</p>
+    <a class="btn btn-primary" href="https://wa.me/5541998322530" target="_blank" rel="noopener">Solicitar orçamento pelo WhatsApp</a>
+  </div>
+</div>
+
+<!-- CONTATO -->
+<section class="contato" id="contato">
+  <div class="container contato-grid">
+    <div class="contato-info reveal">
+      <span class="eyebrow">Fale com a gente</span>
+      <h2>Estamos prontos para atender sua empresa</h2>
+      <p>Entre em contato pelos canais abaixo. Nossa equipe responde rapidamente para programar sua próxima carga.</p>
+      <div class="info-item"><div class="ico">📍</div><div><h4>Endereço</h4><p>Rodovia da Uva, 2363 — Roça Grande, Colombo/PR — CEP 83402-386</p></div></div>
+      <div class="info-item"><div class="ico">📞</div><div><h4>WhatsApp</h4><p>(41) 99832-2530</p></div></div>
+      <a class="btn btn-primary" href="https://wa.me/5541998322530" target="_blank" rel="noopener" style="margin-top:8px;align-self:flex-start">Iniciar conversa</a>
+    </div>
+    <div class="map-wrap reveal">
+      <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=-49.27,-25.33,-49.17,-25.25&layer=mapnik&marker=-25.292,-49.221" loading="lazy"></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div class="foot-logo"><img src="assets/logo-rcb-branco.png" alt="RCB Logística e Transportes"></div>
+      <div class="foot-links">
+        <a href="#topo">Início</a><a href="#historia">História</a><a href="#servicos">Serviços</a><a href="#frota">Frota</a><a href="#contato">Contato</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 RCB Logística e Transportes. Todos os direitos reservados.</span>
+      <span>Uma história movida por paixão e confiança.</span>
+    </div>
+  </div>
+</footer>
+
+<a class="wa-float" href="https://wa.me/5541998322530" target="_blank" rel="noopener" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.945C.16 5.335 5.495 0 12.05 0a11.82 11.82 0 018.413 3.488 11.82 11.82 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.51 5.26l-.999 3.648 3.978-1.717zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.247-.694.247-1.289.173-1.413z"/></svg>
+</a>
+
+<script>
+  const header=document.getElementById('topo');
+  window.addEventListener('scroll',()=>header.classList.toggle('scrolled',window.scrollY>40));
+  const burger=document.getElementById('burger'),navLinks=document.getElementById('navLinks');
+  burger.addEventListener('click',()=>navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>navLinks.classList.remove('open')));
+  const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('show')}),{threshold:.15});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>

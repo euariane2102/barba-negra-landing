@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LogFlux — Demo Comercial</title>
+<style>
+:root{
+  --navy:#0a1f38; --blue:#2F80ED; --blue2:#4AA3FF; --teal:#3FD0C9; --green:#23D18B;
+  --branco:#fff; --creme:#f4f8fd;
+  --enviado:#9FC5E8; --carreg:#FFD400; --viagem:#FF9F45; --entregue:#7DE08A;
+  --vinho:#722F37;
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',-apple-system,Roboto,Arial,sans-serif}
+html,body{height:100%;background:#040c16;display:flex;align-items:center;justify-content:center;overflow:hidden}
+
+.viewport{position:relative;width:100%;height:100vh;background:linear-gradient(135deg,#0C447C 0%,#062644 50%,#05101d 100%);overflow:hidden}
+.viewport::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(255,255,255,.018) 0 2px,transparent 2px 9px);pointer-events:none}
+.viewport::after{content:"";position:absolute;left:-20%;right:-20%;top:38%;height:30%;background:radial-gradient(ellipse at center,rgba(63,208,201,.12),transparent 70%);filter:blur(20px);pointer-events:none}
+
+.scene{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;padding:5vh 5%;text-align:center;transition:opacity .55s ease;gap:1.5vh}
+.scene.on{opacity:1;pointer-events:auto}
+
+@keyframes up{from{opacity:0;transform:translateY(4vh)}to{opacity:1;transform:translateY(0)}}
+@keyframes pop{0%{opacity:0;transform:scale(.6)}60%{transform:scale(1.08)}100%{opacity:1;transform:scale(1)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+@keyframes flow{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+@keyframes drift{0%,100%{transform:translateY(0)}50%{transform:translateY(-1.4vh)}}
+
+.on .a{animation:up .8s both}.on .pop{animation:pop .7s both}
+.d1{animation-delay:.2s!important}.d2{animation-delay:.5s!important}.d3{animation-delay:.8s!important}
+.d4{animation-delay:1.1s!important}.d5{animation-delay:1.4s!important}.d6{animation-delay:1.7s!important}
+
+.logo{font-weight:900;letter-spacing:.1vh;color:#fff;line-height:1}
+.logo .fx{background:linear-gradient(90deg,var(--blue2),var(--teal),var(--blue2));background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:flow 3s linear infinite}
+.big{font-size:9vh;font-weight:900;color:#fff;line-height:1.04}
+.mid{font-size:3.5vh;font-weight:800;color:#fff;line-height:1.22}
+.sub{font-size:2.3vh;color:rgba(255,255,255,.88);font-weight:500;line-height:1.5;max-width:90%}
+.ac{color:var(--teal)}.slogan{font-size:3vh;color:var(--teal);font-weight:800;font-style:italic}
+
+.badge{width:14vh;height:14vh;filter:drop-shadow(0 1vh 3vh rgba(47,128,237,.45))}
+
+/* painel */
+.window{background:#fff;border-radius:2vh;box-shadow:0 3vh 8vh rgba(0,0,0,.5);overflow:hidden;width:100%;max-width:85vh;text-align:left;border:1px solid rgba(63,208,201,.25)}
+.winbar{background:linear-gradient(90deg,#123a66,#0e2a47);padding:1.4vh 2vh;display:flex;align-items:center;gap:1vh}
+.winbar .dot{width:1.2vh;height:1.2vh;border-radius:50%;background:rgba(255,255,255,.4)}
+.winbar b{color:#fff;margin-left:1vh;font-size:1.8vh;letter-spacing:.1vh}
+.wincontent{padding:2.2vh;background:var(--creme);max-height:50vh;overflow-y:auto}
+
+.kpis{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:1.5vh}
+.kpi{background:#fff;border:1px solid #dce6f2;border-radius:1.4vh;padding:1.8vh;position:relative;overflow:hidden}
+.kpi .bar{position:absolute;left:0;top:0;bottom:0;width:.6vh}
+.kpi .n{font-size:4.6vh;font-weight:900;color:#0e2a47;line-height:1}
+.kpi .lb{font-size:1.5vh;color:#5a6b80;margin-top:.8vh;font-weight:700}
+
+.prow{background:#fff;border:1px solid #dce6f2;border-left:.6vh solid #ccc;border-radius:1.3vh;padding:1.5vh 1.8vh;display:flex;align-items:center;gap:1.4vh;margin-top:1.4vh}
+.prow .who{font-weight:800;color:#0e2a47;font-size:1.9vh;min-width:11vh}
+.prow .cli{flex:1;color:#5a6b80;font-weight:600;font-size:1.7vh}
+.chip{padding:.8vh 1.4vh;border-radius:1vh;font-size:1.5vh;font-weight:800;white-space:nowrap}
+.c-env{background:var(--enviado);color:#09365c}.c-car{background:var(--carreg);color:#5c5200}
+.c-via{background:var(--viagem);color:#6b3500}.c-ent{background:var(--entregue);color:#0b5219}
+
+/* preços */
+.pricing{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2vh;width:100%;max-width:85vh}
+.price-card{background:rgba(255,255,255,.08);border:1.5px solid rgba(63,208,201,.3);border-radius:2vh;padding:2.4vh;text-align:center;color:#fff;transition:.3s}
+.price-card:hover{background:rgba(63,208,201,.15);border-color:var(--teal);transform:translateY(-1vh)}
+.price-card.featured{border-color:var(--green);background:rgba(35,209,139,.12)}
+.price-card .plan{font-size:2.2vh;font-weight:800;margin-bottom:1vh}
+.price-card .val{font-size:5vh;font-weight:900;color:var(--green);margin:1.5vh 0}
+.price-card .per{font-size:1.4vh;color:rgba(255,255,255,.7);margin-bottom:2vh}
+.price-card ul{text-align:left;list-style:none;margin:2vh 0;font-size:1.6vh;line-height:2.2vh}
+.price-card li{margin:.8vh 0}
+.price-card li:before{content:"✓ ";color:var(--green);font-weight:900;margin-right:.8vh}
+
+/* botões */
+.cta-btn{margin-top:2vh;background:var(--green);color:#053d27;font-weight:900;font-size:2.8vh;padding:2vh 5vh;border-radius:6vh;letter-spacing:.1vh;box-shadow:0 2vh 5vh rgba(35,209,139,.4);animation:pulse 1.6s infinite;cursor:pointer;border:none}
+.cta-btn:hover{transform:scale(1.05)}
+
+.contato{display:flex;flex-direction:column;gap:1.2vh;color:#fff;font-weight:700;font-size:2.2vh}
+.contato .lin{display:flex;align-items:center;justify-content:center;gap:1.2vh}
+
+/* controles */
+#bar{position:absolute;top:0;left:0;height:.7vh;background:linear-gradient(90deg,var(--blue),var(--teal));width:0;z-index:40;box-shadow:0 0 1.4vh var(--teal)}
+#ctrl{position:absolute;bottom:2vh;left:50%;transform:translateX(-50%);z-index:40;display:flex;gap:1.2vh;background:rgba(0,0,0,.4);padding:1vh 1.6vh;border-radius:5vh;backdrop-filter:blur(8px)}
+#ctrl button{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:5vh;padding:1vh 2.2vh;font-size:1.6vh;font-weight:700;cursor:pointer}
+#ctrl button:hover{background:var(--teal);color:#06283a}
+
+#som{position:absolute;top:2vh;right:2vh;z-index:40;background:rgba(0,0,0,.4);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:5vh;padding:.8vh 1.6vh;font-size:1.5vh;font-weight:700;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="viewport">
+  <div id="bar"></div>
+  <button id="som" onclick="toggleSom()">🔊 Narração: ON</button>
+
+  <!-- 1 ABERTURA -->
+  <section class="scene" data-dur="3800" data-narr="LogFlux. A plataforma que transforma a logística em tempo real.">
+    <svg class="badge pop d1" viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
+      <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2F80ED"/><stop offset="1" stop-color="#3FD0C9"/></linearGradient></defs>
+      <rect x="4" y="4" width="132" height="132" rx="32" fill="url(#g1)"/>
+      <g stroke="#fff" stroke-width="9" stroke-linecap="round" fill="none"><path d="M34 56 H72"/><path d="M34 76 H90"/><path d="M34 96 H72"/></g>
+      <path d="M84 50 L118 73 L84 96" stroke="#fff" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>
+    <div class="logo big pop d2" style="margin:.5vh 0">Log<span class="fx">Flux</span></div>
+    <div class="slogan a d4">"Logística que flui."</div>
+  </section>
+
+  <!-- 2 PROBLEMA -->
+  <section class="scene" data-dur="4600" data-narr="Sua frota ainda roda em planilhas? Pedidos se perdem, motoristas não sabem rotas, e você gerencia tudo manualmente?">
+    <div class="mid a d1">Chega de <span class="ac">planilhas</span><br>e <span class="ac">caos logístico</span></div>
+    <div class="sub a d2" style="max-width:85%">Gerenciar frotas não pode ser complicado.<br>LogFlux torna tudo simples, visível e automático.</div>
+  </section>
+
+  <!-- 3 SOLUÇÃO -->
+  <section class="scene" data-dur="3800" data-narr="Conheça LogFlux. Seu novo painel de controle logístico.">
+    <div class="big a d1">Bem-vindo ao<br><span class="logo" style="font-size:5vh">Log<span class="fx">Flux</span></span></div>
+  </section>
+
+  <!-- 4 PAINEL DEMO -->
+  <section class="scene" data-dur="5400" data-narr="Veja sua operação inteira, em tempo real, num painel único.">
+    <div class="mid a d1">📊 Painel Executivo<br><span class="ac">em Tempo Real</span></div>
+    <div class="window pop d2">
+      <div class="winbar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><b>Log<span class="fx">Flux</span> · OPERAÇÕES</b></div>
+      <div class="wincontent">
+        <div class="kpis">
+          <div class="kpi pop d3"><div class="bar" style="background:var(--viagem)"></div><div class="n" data-count="23">0</div><div class="lb">EM VIAGEM</div></div>
+          <div class="kpi pop d4"><div class="bar" style="background:var(--carreg)"></div><div class="n" data-count="12">0</div><div class="lb">CARREGANDO</div></div>
+          <div class="kpi pop d5"><div class="bar" style="background:var(--entregue)"></div><div class="n" data-count="87">0</div><div class="lb">ENTREGUES HOJE</div></div>
+          <div class="kpi pop d6"><div class="bar" style="background:var(--blue)"></div><div class="n" data-count="45">0</div><div class="lb">CAMINHÕES</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 PEDIDOS -->
+  <section class="scene" data-dur="5000" data-narr="Cada pedido com status visual. Você enxerga tudo num piscar de olhos.">
+    <div class="mid a d1">📦 Rastreamento de<br><span class="ac">Pedidos Coloridos</span></div>
+    <div class="window pop d2">
+      <div class="winbar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><b>Log<span class="fx">Flux</span> · PEDIDOS</b></div>
+      <div class="wincontent">
+        <div class="prow r d3" style="border-left-color:var(--viagem)"><span class="who">RODRIGO</span><span class="cli">Cimento granel • São Paulo</span><span class="chip c-via">Em viagem</span></div>
+        <div class="prow r d4" style="border-left-color:var(--carreg)"><span class="who">FELIPE</span><span class="cli">Carreta silo • Minas Gerais</span><span class="chip c-car">Carregando</span></div>
+        <div class="prow r d5" style="border-left-color:var(--entregue)"><span class="who">MARCOS</span><span class="cli">Granel • Paraná</span><span class="chip c-ent">Entregue ✓</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 AUTOMAÇÃO -->
+  <section class="scene" data-dur="4200" data-narr="Motorista recebe notificação automática no WhatsApp. Sem você mexer um dedo.">
+    <div class="mid a d1">🟢 Notificações Automáticas<br>via <span class="ac">WhatsApp</span></div>
+    <div class="sub a d2">Motorista informado → Menos ligações → Mais produtividade</div>
+  </section>
+
+  <!-- 7 PREÇOS -->
+  <section class="scene" data-dur="6200" data-narr="Planos para qualquer tamanho de frota. Começe agora!">
+    <div class="mid a d1">💰 Planos Simples e<br><span class="ac">Transparentes</span></div>
+    <div class="pricing pop d2">
+      <div class="price-card d3">
+        <div class="plan">Pequeno</div>
+        <div class="val">R$ 50<span style="font-size:2.5vh">/mês</span></div>
+        <div class="per">até 5 caminhões</div>
+        <ul>
+          <li>Painel básico</li>
+          <li>Pedidos e status</li>
+          <li>WhatsApp integrado</li>
+        </ul>
+      </div>
+      <div class="price-card featured d4">
+        <div class="plan">⭐ Médio</div>
+        <div class="val">R$ 150<span style="font-size:2.5vh">/mês</span></div>
+        <div class="per">até 20 caminhões</div>
+        <ul>
+          <li>Painel completo</li>
+          <li>Histórico de operações</li>
+          <li>Relatórios automáticos</li>
+          <li>Suporte prioritário</li>
+        </ul>
+      </div>
+      <div class="price-card d5">
+        <div class="plan">Sob Medida</div>
+        <div class="val">Contato</div>
+        <div class="per">acima de 20</div>
+        <ul>
+          <li>Soluções customizadas</li>
+          <li>API própria</li>
+          <li>Suporte 24/7</li>
+          <li>Integração total</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 CTA FINAL -->
+  <section class="scene" data-dur="4000" data-narr="Pronto para transformar sua logística? Solicite uma demonstração agora mesmo!">
+    <div class="big a d1" style="font-size:8vh">Vamos começar?</div>
+    <button class="cta-btn pop d2" onclick="abrirContato()">🚀 Solicitar Demo</button>
+    <div class="contato a d3" style="margin-top:3vh">
+      <div>📞 +55 11 98765-4321</div>
+      <div>📧 contato@logflux.com.br</div>
+    </div>
+  </section>
+
+  <div id="ctrl">
+    <button onclick="play(true)">▶ Reproduzir com narração</button>
+    <button onclick="play(true)">↻ Recomeçar</button>
+  </div>
+</div>
+
+<script>
+const scenes=[...document.querySelectorAll('.scene')];
+const bar=document.getElementById('bar');
+const total=scenes.reduce((s,e)=>s+(+e.dataset.dur),0);
+let timers=[],somOn=true;
+
+let vozPT=null;
+function escolherVoz(){
+  const vs=speechSynthesis.getVoices();
+  const pt=vs.filter(v=>/pt[-_]BR/i.test(v.lang)||/portug/i.test(v.name));
+  vozPT = pt.find(v=>/google/i.test(v.name))
+       || pt.find(v=>/(natural|online|francisca|thalita|brenda|ant[oô]nio|microsoft)/i.test(v.name))
+       || pt[0]
+       || vs.find(v=>/^pt/i.test(v.lang))
+       || null;
+}
+escolherVoz();
+if(typeof speechSynthesis!=='undefined')speechSynthesis.onvoiceschanged=escolherVoz;
+
+function falar(txt){
+  if(!somOn||!txt||typeof speechSynthesis==='undefined')return;
+  const u=new SpeechSynthesisUtterance(txt);
+  u.lang='pt-BR';u.rate=1.08;u.pitch=1.0;u.volume=1;
+  if(vozPT)u.voice=vozPT;
+  speechSynthesis.speak(u);
+}
+
+function toggleSom(){
+  somOn=!somOn;
+  document.getElementById('som').textContent=somOn?'🔊 Narração: ON':'🔇 Narração: OFF';
+  if(!somOn)speechSynthesis.cancel();
+}
+
+function clearAll(){
+  timers.forEach(t=>clearTimeout(t));
+  timers=[];
+  scenes.forEach(s=>s.classList.remove('on'));
+  if(typeof speechSynthesis!=='undefined')speechSynthesis.cancel();
+}
+
+function countUp(scene){
+  scene.querySelectorAll('[data-count]').forEach(el=>{
+    const end=+el.dataset.count;let cur=0;const step=Math.max(1,Math.round(end/28));
+    const iv=setInterval(()=>{cur+=step;if(cur>=end){cur=end;clearInterval(iv)}el.textContent=cur},40);
+  });
+}
+
+function play(fromClick){
+  clearAll();escolherVoz();
+  if(fromClick){const c=document.getElementById('ctrl');if(c)c.style.display='none';const s=document.getElementById('som');if(s)s.style.display='none';}
+  let acc=0;
+  scenes.forEach((sc)=>{
+    const dur=+sc.dataset.dur;
+    timers.push(setTimeout(()=>{
+      scenes.forEach(s=>s.classList.remove('on'));
+      sc.classList.add('on');countUp(sc);
+      falar(sc.dataset.narr);
+    },acc));
+    acc+=dur;
+  });
+  const t0=performance.now();
+  function tick(now){const p=Math.min(1,(now-t0)/total);bar.style.width=(p*100)+'%';if(p<1)requestAnimationFrame(tick)}
+  requestAnimationFrame(tick);
+}
+
+function abrirContato(){
+  alert('Abrir formulário de contato:\nlogflux.com.br/demo\n\nOu enviar WhatsApp para:\n+55 11 98765-4321');
+}
+
+window.addEventListener('load',()=>setTimeout(()=>play(false),400));
+</script>
+</body>
+</html>

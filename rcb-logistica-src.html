@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>RCB Logística e Transportes — Tradição em movimento</title>
-<meta name="description" content="RCB Logística e Transportes: duas gerações movendo cargas a granel pelo Brasil com segurança, pontualidade e o compromisso de uma empresa familiar." />
+<meta name="description" content="RCB Logística e Transportes: três gerações movendo cargas a granel pelo Brasil com segurança, pontualidade e o compromisso de uma empresa familiar." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -33,6 +33,9 @@
   .nav-cta{background:var(--wa);color:#fff!important;padding:10px 22px;border-radius:30px;font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:1px;display:flex;align-items:center;gap:8px;transition:transform .2s,box-shadow .2s;text-shadow:none!important}
   .nav-cta::after{display:none}
   .nav-cta:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(37,211,102,.4)}
+  .nav-sistema{border:1px solid rgba(255,255,255,.55);padding:8px 18px!important;border-radius:30px;font-weight:600!important;transition:background .25s,transform .2s}
+  .nav-sistema::after{display:none}
+  .nav-sistema:hover{background:rgba(255,255,255,.14);transform:translateY(-2px)}
   .burger{display:none;color:#fff;font-size:26px;cursor:pointer;background:none;border:none}
 
   /* HERO */
@@ -67,7 +70,7 @@
   section{padding:100px 0}
   .section-head{text-align:center;max-width:700px;margin:0 auto 60px}
   .eyebrow{display:inline-block;color:var(--vinho);font-weight:700;letter-spacing:3px;text-transform:uppercase;font-size:12px;margin-bottom:14px}
-  .eyebrow::before{content:"— "}.eyebrow::after{content:" —"}
+  .eyebrow::before{content:""}.eyebrow::after{content:""}
   .section-head h2{font-size:clamp(28px,4vw,42px);color:var(--vinho-darker);font-weight:700;line-height:1.2}
   .section-head p{color:var(--muted);margin-top:18px;font-size:16px}
 
@@ -112,6 +115,14 @@
   .frota-list li::before{content:"✓";flex:0 0 28px;height:28px;border-radius:50%;background:var(--wa);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
   .frota-img{border-radius:10px;overflow:hidden;box-shadow:0 30px 70px -20px rgba(0,0,0,.55)}
   .frota-img img{aspect-ratio:4/3;object-fit:cover;width:100%}
+
+  /* FROTA GALERIA */
+  .frota-galeria{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .frota-galeria figure{position:relative;border-radius:10px;overflow:hidden;box-shadow:0 22px 50px -22px rgba(0,0,0,.6);aspect-ratio:16/10}
+  .frota-galeria figure:first-child{grid-column:1 / -1;aspect-ratio:16/8}
+  .frota-galeria img{width:100%;height:100%;object-fit:cover;transition:transform .55s}
+  .frota-galeria figure:hover img{transform:scale(1.07)}
+  .frota-galeria figcaption{position:absolute;left:0;right:0;bottom:0;padding:24px 12px 9px;background:linear-gradient(transparent,rgba(46,18,22,.85));color:#fff;font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.5px;text-transform:uppercase}
 
   /* CTA */
   .cta-band{background:linear-gradient(120deg,var(--vinho),var(--vinho-dark));color:#fff;text-align:center;padding:78px 0}
@@ -178,6 +189,7 @@
         <a href="#servicos">Serviços</a>
         <a href="#frota">Frota</a>
         <a href="#contato">Contato</a>
+        <a class="nav-sistema" href="sistema.html" rel="noopener">🔒 Acessar Sistema</a>
         <a class="nav-cta" href="https://wa.me/5541998322530" target="_blank" rel="noopener">WhatsApp</a>
       </div>
       <button class="burger" id="burger">☰</button>
@@ -189,7 +201,7 @@
 <section class="hero">
   <div class="hero-bg">
     <img class="slide" src="assets/caminhao-rcb.jpeg" alt="Caminhão tanque RCB Logística">
-    <img class="slide" src="assets/caminhao-scania.jpeg" alt="Scania RCB carregando">
+    <img class="slide" src="assets/frota-iveco.jpg" alt="Caminhão da frota RCB Logística">
   </div>
   <div class="container hero-content">
     <span class="hero-tag">Tradição familiar movida pela estrada</span>
@@ -198,6 +210,7 @@
     <div class="hero-btns">
       <a class="btn btn-primary" href="https://wa.me/5541998322530" target="_blank" rel="noopener">Falar no WhatsApp</a>
       <a class="btn btn-outline" href="#frota">Conheça nossa frota</a>
+      <a class="btn btn-outline" href="sistema.html" rel="noopener">🔒 Acessar Sistema</a>
     </div>
   </div>
   <div class="scroll-cue"><span>Role para conhecer</span><div class="line"></div></div>
@@ -206,7 +219,7 @@
 <!-- STATS -->
 <div class="stats">
   <div class="reveal"><div class="num">+30</div><div class="lbl">Caminhões na frota</div></div>
-  <div class="reveal"><div class="num">2</div><div class="lbl">Gerações na estrada</div></div>
+  <div class="reveal"><div class="num">3</div><div class="lbl">Gerações na estrada</div></div>
   <div class="reveal"><div class="num">5</div><div class="lbl">Estados atendidos</div></div>
   <div class="reveal"><div class="num">24h</div><div class="lbl">Operação programada</div></div>
 </div>
@@ -215,19 +228,18 @@
 <section class="historia" id="historia">
   <div class="container historia-grid">
     <div class="historia-img reveal">
-      <img class="hist-road" src="assets/estrada-c.jpg" alt="Estrada aberta — a paixão que move a RCB">
-      <img class="hist-logo" src="assets/logo-rcb.png" alt="RCB Logística e Transportes">
+      <img class="hist-road" src="assets/frota-tanque.jpg" alt="Tanque graneleiro da frota RCB Logística">
     </div>
     <div class="historia-text reveal">
       <span class="eyebrow">Nossa história</span>
       <h2>Uma história movida por paixão e confiança</h2>
-      <p>Toda grande jornada começa com um sonho. A nossa começou com a paixão de <strong>Carlos Braghini</strong> pelos caminhões e pelo transporte de cargas.</p>
+      <p>Toda grande jornada começa com um sonho. A nossa começou com a paixão de <strong>Ressoli Carlos Braghini</strong> pelos caminhões e pelo transporte de cargas.</p>
       <p>Movido pelo desejo de construir algo sólido e duradouro, Carlos transformou seu amor pela estrada em uma empresa baseada em trabalho, honestidade e comprometimento. Cada viagem realizada, cada cliente atendido e cada motorista valorizado ajudaram a construir uma história marcada pela dedicação e pelo respeito.</p>
       <p>Com o passar dos anos, a empresa deixou de ser apenas um negócio. Tornou-se um <strong>legado familiar</strong>.</p>
-      <p>Hoje, esse legado segue firme pelas mãos de <strong>Rodrigo Braghini</strong>, que mantém vivos os valores ensinados por seu pai — respeito a cada motorista, atenção a cada cliente e o mesmo compromisso com a excelência — conduzindo a empresa rumo ao futuro sem esquecer as raízes que construíram essa trajetória.</p>
+      <p>Hoje, esse legado segue firme pelas mãos de <strong>Rodrigo Wagner Braghini</strong>, que mantém vivos os valores ensinados por seu pai — respeito a cada motorista, atenção a cada cliente e o mesmo compromisso com a excelência — conduzindo a empresa rumo ao futuro sem esquecer as raízes que construíram essa trajetória.</p>
       <div class="timeline">
-        <div class="tl-item"><h4>Carlos Braghini</h4><p>Fundador — transformou a paixão pela estrada em empresa.</p></div>
-        <div class="tl-item"><h4>Rodrigo Braghini</h4><p>Atual gestão — mantém os valores e moderniza a operação.</p></div>
+        <div class="tl-item"><h4>Ressoli Carlos Braghini</h4><p>Fundador — transformou a paixão pela estrada em empresa.</p></div>
+        <div class="tl-item"><h4>Rodrigo Wagner Braghini</h4><p>Atual gestão — mantém os valores e moderniza a operação.</p></div>
       </div>
       <p class="signoff">"Mais do que transportar cargas, transportamos confiança, responsabilidade e a tradição de uma família que acredita que o sucesso é construído por pessoas."</p>
     </div>
@@ -268,8 +280,10 @@
         <li>Operação programada com WhatsApp como canal direto com o motorista</li>
       </ul>
     </div>
-    <div class="frota-img reveal">
-      <img src="assets/caminhao-scania.jpeg" alt="Caminhão Scania da frota RCB">
+    <div class="frota-galeria reveal">
+      <figure><img src="assets/frota-scania.jpg" alt="Scania Streamline da frota RCB" loading="lazy"><figcaption>Scania Streamline</figcaption></figure>
+      <figure><img src="assets/frota-volvo.jpg" alt="Volvo FH da frota RCB" loading="lazy"><figcaption>Volvo FH</figcaption></figure>
+      <figure><img src="assets/frota-mercedes.jpg" alt="Mercedes-Benz Axor da frota RCB" loading="lazy"><figcaption>Mercedes-Benz Axor</figcaption></figure>
     </div>
   </div>
 </section>
@@ -306,7 +320,7 @@
     <div class="foot-grid">
       <div class="foot-logo"><img src="assets/logo-rcb-branco.png" alt="RCB Logística e Transportes"></div>
       <div class="foot-links">
-        <a href="#topo">Início</a><a href="#historia">História</a><a href="#servicos">Serviços</a><a href="#frota">Frota</a><a href="#contato">Contato</a>
+        <a href="#topo">Início</a><a href="#historia">História</a><a href="#servicos">Serviços</a><a href="#frota">Frota</a><a href="#contato">Contato</a><a href="sistema.html" rel="noopener">Acessar Sistema</a>
       </div>
     </div>
     <div class="foot-bottom">
